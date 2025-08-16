@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface SidebarProps {
   currentSection: string;
@@ -6,6 +6,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ currentSection, setCurrentSection }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const navItems = [
     { id: 'about', label: 'About' },
     { id: 'verticals', label: 'Verticals' },
@@ -15,7 +17,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, setCurrentSection }) 
   ];
 
   return (
-    <div className="fixed left-10 top-0 h-full w-8 flex flex-col justify-center z-40">
+    <>
+      {/* Desktop Sidebar - Hidden on mobile */}
+      <div className="hidden md:flex fixed left-10 top-0 h-full w-8 flex-col justify-center z-40">
       <nav className="flex flex-col items-center space-y-16">
         {navItems.map((item, index) => (
           <button
@@ -37,6 +41,41 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, setCurrentSection }) 
         ))}
       </nav>
     </div>
+
+      {/* Mobile Hamburger Menu - Shown only on mobile */}
+      <div className="md:hidden fixed top-4 right-4 z-50">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-10 h-10 bg-white rounded-md shadow-lg flex flex-col justify-center items-center space-y-1"
+        >
+          <div className="w-5 h-0.5 bg-gray-900"></div>
+          <div className="w-5 h-0.5 bg-gray-900"></div>
+          <div className="w-5 h-0.5 bg-gray-900"></div>
+        </button>
+
+        {/* Mobile Menu Dropdown */}
+        {isOpen && (
+          <div className="absolute top-12 right-0 bg-white rounded-md shadow-lg py-2 w-32">
+            {navItems.map((item, index) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setCurrentSection(item.id);
+                  setIsOpen(false);
+                }}
+                className={`
+                  block w-full text-left px-4 py-2 text-sm
+                  ${currentSection === item.id || index === 0 ? 'text-gray-900 font-medium' : 'text-gray-600'}
+                  hover:bg-gray-50
+                `}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -76,7 +76,7 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
         // Pause after finishing typing before deleting
         timer = setTimeout(() => {
           setIsDeleting(true);
-        }, 2000);
+        }, 1000);
       } else if (isDeleting && businessIndex > 0) {
         // Deleting phase
         timer = setTimeout(() => {
@@ -103,13 +103,13 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
     <main className="min-h-screen flex items-center justify-center relative overflow-hidden">
       <div className="relative max-w-7xl w-full px-8 lg:px-16">
         
-        {/* Large Background Text - "Hello!" */}
-        <div 
+       {/* Large Background Text - "Hello!" */}
+       <div 
           className="flex items-center justify-center opacity-[0.04] pointer-events-none select-none"
           style={{ transform: `translateY(${scrollY * 0.1}px)` }}
         >
-          <h1 className="text-[15rem] md:text-[20rem] lg:text-[25rem] xl:text-[30rem] font-extralight leading-none tracking-tight text-gray-900 italic">
-            Hello!
+          <h1 className="text-[10rem] md:text-[14rem] lg:text-[18rem] xl:text-[22rem] font-extralight leading-none tracking-tight text-gray-900 italic">
+          Hello!
           </h1>
         </div>
 
@@ -118,7 +118,7 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
           
           {/* Main Heading */}
           <div className="space-y-4">
-            <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light leading-tight tracking-tight text-gray-900">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight tracking-tight text-gray-900">
               We are<br />
               <span className="font-normal">
                 {displayedText}
@@ -128,8 +128,8 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
           </div>
         </div>
 
-         {/* Tagline with line */}
-         <div className="fixed right-10 -translate-y-1/8 z-50">
+         {/* Tagline with line - Hidden on mobile, visible on larger screens */}
+         <div className="hidden md:block fixed right-10 -translate-y-1/8 z-50">
            <div className="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl">
              <div className="flex items-center space-x-6">
                <div className="w-16 h-px bg-gradient-to-r from-gray-900 via-gray-600 to-transparent"></div>
@@ -146,6 +146,22 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
                  </p>
                </div>
              </div>
+           </div>
+         </div>
+
+         {/* Mobile Tagline - Only visible on mobile */}
+         <div className="lg:hidden relative z-10 mt-8 sm:mt-12 text-center">
+           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg max-w-sm mx-auto">
+             <p className="text-xs font-medium tracking-[0.3em] text-gray-500 uppercase mb-2">
+               Specialized In
+             </p>
+             <p className="text-lg sm:text-xl font-extralight leading-tight tracking-tight text-gray-900">
+               AI Solutions<br />
+               <span className="text-base sm:text-lg text-gray-600">
+                 {businessText}
+                 {showBusinessCursor && <span className="text-gray-600">|</span>}
+               </span>
+             </p>
            </div>
          </div>
       </div>
