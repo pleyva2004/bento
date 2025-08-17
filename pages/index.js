@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import Sidebar from './components/Sidebar';
-import Hero from './components/Hero';
-import FloatingCTA from './components/FloatingCTA';
-import Logo from './components/Logo';
+import Sidebar from '../src/components/Sidebar';
+import Hero from '../src/components/Hero';
+import FloatingCTA from '../src/components/FloatingCTA';
+import Logo from '../src/components/Logo';
+import ChatInput from '../src/components/ChatInput';
+import TryOurAI from '../src/components/TryOurAI';
 
-function App() {
+export default function Home() {
   const [currentSection, setCurrentSection] = useState('home');
   const [scrollY, setScrollY] = useState(0);
 
@@ -15,7 +17,7 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-white text-gray-900 min-h-screen">
+    <div className="bg-white text-gray-900 min-h-screen pb-20">
       <Logo />
       <Sidebar 
         currentSection={currentSection} 
@@ -23,8 +25,8 @@ function App() {
       />
       <Hero scrollY={scrollY} />
       <FloatingCTA />
+      <TryOurAI />
+      <ChatInput />
     </div>
   );
 }
-
-export default App;
