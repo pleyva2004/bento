@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   id: number;
@@ -13,6 +14,21 @@ const ChatInput: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCollapsing, setIsCollapsing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, [message]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +92,13 @@ const ChatInput: React.FC = () => {
     }, 500);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as any);
+    }
+  };
+
   return (
     <div className="fixed left-0 right-0 z-40 bottom-0">
       <div 
@@ -127,7 +150,18 @@ const ChatInput: React.FC = () => {
                             : 'bg-white bg-opacity-70 text-gray-900 border border-gray-300 border-opacity-50'
                         }`}
                       >
-                        <p className="text-sm">{msg.text}</p>
+                        <p className="text-sm">
+                          <ReactMarkdown
+                            components={{
+                              ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 mb-2" {...props} />,
+                              ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-1 mb-2" {...props} />,
+                              li: ({node, ...props}) => <li className="ml-0" {...props} />,
+                              p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />
+                            }}
+                          >
+                            {msg.text}
+                          </ReactMarkdown>
+                        </p>
                         {/* <p className="text-xs opacity-70 mt-1">
                           {msg.timestamp.toLocaleTimeString()}
                         </p> */}
@@ -157,24 +191,27 @@ const ChatInput: React.FC = () => {
 
           {/* Input Area */}
           <div className={`p-4 ${isExpanded ? 'pb-6' : ''}`}>
-            <form onSubmit={handleSubmit} className="flex items-center space-x-3">
+            <form onSubmit={handleSubmit} className="flex items-end space-x-3">
               <div className="flex-1 relative">
-                <input
-                  type="text"
+                <textarea
+                  ref={textareaRef}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   onFocus={handleInputFocus}
                   disabled={isLoading}
+                  rows={1}
                   placeholder={isExpanded ? "Continue the conversation..." : "Ask about Levrin Labs..."}
-                  className="w-full px-4 py-3 pr-12 bg-white bg-opacity-50 border border-gray-300 border-opacity-50 rounded-full text-gray-900 placeholder-gray-600
+                  className="w-full px-4 py-3 pr-12 bg-white bg-opacity-50 border border-gray-300 border-opacity-50 rounded-2xl text-gray-900 placeholder-gray-600 resize-none overflow-hidden
                     focus:outline-none focus:border-gray-400 focus:border-opacity-70 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-20 
                     hover:border-gray-400 hover:border-opacity-60 hover:bg-opacity-60
                     transition-all duration-300"
+                  style={{ minHeight: '48px' }}
                 />
                 <button
                   type="submit"
                   disabled={!message.trim() || isLoading}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-gray-100 hover:scale-105 transition-all duration-300 disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="absolute right-2 bottom-3 w-8 h-8 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-gray-100 hover:scale-105 transition-all duration-300 disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   <span className="text-sm">→</span>
                 </button>
@@ -183,7 +220,7 @@ const ChatInput: React.FC = () => {
 
             {!isExpanded && (
               <p className="text-xs text-gray-500 text-center mt-2">
-                AI can make mistakes. Consider checking important information.
+                AI can make mistakes. Consider checking important information. Press Enter to send, Shift+Enter for new line.
               </p>
             )}
           </div>
