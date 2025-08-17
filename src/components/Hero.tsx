@@ -53,7 +53,7 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
 
   // Animation for cycling business text with delete/retype
   useEffect(() => {
-    let timer: number;
+    let timer: ReturnType<typeof setTimeout>;
     
     // Immediate switch to next text after deletion completes
     if (isDeleting && businessIndex === 0) {

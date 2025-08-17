@@ -12,8 +12,9 @@ const ChatInput: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCollapsing, setIsCollapsing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
       // Add user message
@@ -26,17 +27,37 @@ const ChatInput: React.FC = () => {
       
       setMessages(prev => [...prev, userMessage]);
       setMessage('');
+      setIsLoading(true);
 
-      // Simulate AI response after a delay
-      setTimeout(() => {
+      // Get AI response
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: message.trim() }),
+        });
+        
+        const data = await response.json();
         const aiMessage: Message = {
           id: Date.now() + 1,
-          text: "Thanks for your message! This is a demo response from Levrin Labs. We'll get back to you soon with more details about our AI solutions.",
+          text: data.message || "Sorry, I couldn't process that request.",
           isUser: false,
           timestamp: new Date()
         };
         setMessages(prev => [...prev, aiMessage]);
-      }, 1000);
+        setIsLoading(false);
+      } catch (error) {
+        const errorMessage: Message = {
+          id: Date.now() + 1,
+          text: "Sorry, I'm having trouble connecting right now. Please try again.",
+          isUser: false,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -88,30 +109,48 @@ const ChatInput: React.FC = () => {
 
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ height: 'calc(100% - 64px)' }}>
-              {messages.length === 0 ? (
+              {messages.length === 0 && !isLoading ? (
                 <div className="text-center text-gray-500 py-8">
                   <p className="text-sm">Start a conversation with Levrin Labs</p>
                 </div>
               ) : (
-                messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}
-                  >
+                <>
+                  {messages.map((msg) => (
                     <div
-                      className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-                        msg.isUser
-                          ? 'bg-gray-800 bg-opacity-80 text-white border border-gray-700 border-opacity-50'
-                          : 'bg-white bg-opacity-70 text-gray-900 border border-gray-300 border-opacity-50'
-                      }`}
+                      key={msg.id}
+                      className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}
                     >
-                      <p className="text-sm">{msg.text}</p>
-                      {/* <p className="text-xs opacity-70 mt-1">
-                        {msg.timestamp.toLocaleTimeString()}
-                      </p> */}
+                      <div
+                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                          msg.isUser
+                            ? 'bg-gray-800 bg-opacity-80 text-white border border-gray-700 border-opacity-50'
+                            : 'bg-white bg-opacity-70 text-gray-900 border border-gray-300 border-opacity-50'
+                        }`}
+                      >
+                        <p className="text-sm">{msg.text}</p>
+                        {/* <p className="text-xs opacity-70 mt-1">
+                          {msg.timestamp.toLocaleTimeString()}
+                        </p> */}
+                      </div>
                     </div>
-                  </div>
-                ))
+                  ))}
+                  
+                  {/* Loading Animation */}
+                  {isLoading && (
+                    <div className="flex justify-start">
+                      <div className="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl bg-white bg-opacity-70 border border-gray-300 border-opacity-50">
+                        <div className="flex items-center space-x-2">
+                          <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                          </div>
+                          {/* <span className="text-xs text-gray-500">Levrin Labs is thinking...</span> */}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -125,6 +164,7 @@ const ChatInput: React.FC = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onFocus={handleInputFocus}
+                  disabled={isLoading}
                   placeholder={isExpanded ? "Continue the conversation..." : "Ask about Levrin Labs..."}
                   className="w-full px-4 py-3 pr-12 bg-white bg-opacity-50 border border-gray-300 border-opacity-50 rounded-full text-gray-900 placeholder-gray-600
                     focus:outline-none focus:border-gray-400 focus:border-opacity-70 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-20 
@@ -133,7 +173,7 @@ const ChatInput: React.FC = () => {
                 />
                 <button
                   type="submit"
-                  disabled={!message.trim()}
+                  disabled={!message.trim() || isLoading}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-gray-100 hover:scale-105 transition-all duration-300 disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   <span className="text-sm">→</span>
