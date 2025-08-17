@@ -128,27 +128,6 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
           </div>
         </div>
 
-         {/* Tagline with line - Hidden on mobile, visible on larger screens */}
-         <div className="hidden md:block fixed right-10 -translate-y-1/8 z-50">
-           <div className="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl">
-             <div className="flex items-center space-x-6">
-               <div className="w-16 h-px bg-gradient-to-r from-gray-900 via-gray-600 to-transparent"></div>
-               <div className="text-right">
-                 <p className="text-sm font-medium tracking-[0.3em] text-gray-500 uppercase mb-2">
-                   Specialized In
-                 </p>
-                 <p className="text-2xl md:text-3xl font-extralight leading-tight tracking-tight text-gray-900">
-                   AI Solutions<br />
-                   <span className="text-xl md:text-2xl text-gray-600">
-                     {businessText}
-                     {showBusinessCursor && <span className="text-gray-600">|</span>}
-                   </span>
-                 </p>
-               </div>
-             </div>
-           </div>
-         </div>
-
          {/* Mobile Tagline - Only visible on mobile */}
          <div className="lg:hidden relative z-10 mt-8 sm:mt-12 text-center">
            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg max-w-sm mx-auto">
@@ -164,6 +143,27 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
              </p>
            </div>
          </div>
+      </div>
+
+      {/* Tagline with line - Hidden on mobile, visible on larger screens */}
+      <div className="hidden md:block absolute right-10 top-3/4 z-50">
+        <div className="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl">
+          <div className="flex items-center space-x-6">
+            <div className="w-16 h-px bg-gradient-to-r from-gray-900 via-gray-600 to-transparent"></div>
+            <div className="text-right">
+              <p className="text-sm font-medium tracking-[0.3em] text-gray-500 uppercase mb-2">
+                Specialized In
+              </p>
+              <p className="text-2xl md:text-3xl font-extralight leading-tight tracking-tight text-gray-900">
+                AI Solutions<br />
+                <span className="text-xl md:text-2xl text-gray-600">
+                  {businessText}
+                  {showBusinessCursor && <span className="text-gray-600">|</span>}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );
