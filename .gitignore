@@ -418,7 +418,7 @@ FodyWeavers.xsd
 *.msp
 
 # Next.js
-.next/
+.next
 out/
 
 # Node.js
