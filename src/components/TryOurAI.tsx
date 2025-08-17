@@ -2,7 +2,7 @@ import React from 'react';
 
 const TryOurAI: React.FC = () => {
   return (
-    <div className="fixed bottom-20 left-8 z-30 pointer-events-none">
+    <div className="fixed bottom-[90px] left-8 z-30 pointer-events-none">
       {/* Handwritten Text */}
       <div className="relative">
         <svg 
