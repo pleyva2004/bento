@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import FloatingCTA from './components/FloatingCTA';
 import Logo from './components/Logo';
 import ChatInput from './components/ChatInput';
+import TryOurAI from './components/TryOurAI';
 
 function App() {
   const [currentSection, setCurrentSection] = useState('home');
@@ -24,6 +25,7 @@ function App() {
       />
       <Hero scrollY={scrollY} />
       <FloatingCTA />
+      <TryOurAI />
       <ChatInput />
     </div>
   );

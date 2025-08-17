@@ -75,8 +75,8 @@ const ChatInput: React.FC = () => {
             {/* Chat Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-300 border-opacity-30">
               <div className="flex items-center space-x-3">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <h3 className="font-medium text-gray-900">Levrin Labs</h3>
+                <div className="w-3 h-3 bg-green-900 rounded-full"></div>
+                <h3 className="font-medium text-gay-900">Levrin Labs AI</h3>
               </div>
               <button
                 onClick={handleMinimize}
