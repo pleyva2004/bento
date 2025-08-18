@@ -103,7 +103,7 @@ const ChatInput: React.FC = () => {
     <div className="fixed left-0 right-0 z-40 bottom-0">
       <div 
         className={`bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl transition-all duration-1000 ease-out overflow-hidden ${
-          isExpanded ? 'h-[28rem]' : 'h-auto'
+          isExpanded ? 'h-[24rem]' : 'h-auto'
         }`}
       >
         <div className="max-w-4xl mx-auto">
@@ -112,8 +112,8 @@ const ChatInput: React.FC = () => {
           <div className={`transition-all duration-1000 ${
             isExpanded 
               ? isCollapsing 
-                ? 'opacity-0 transform translate-y-4 h-[22rem]' 
-                : 'opacity-100 transform translate-y-0 h-[22rem]'
+                ? 'opacity-0 transform translate-y-4 h-[18rem]' 
+                : 'opacity-100 transform translate-y-0 h-[18rem]'
               : 'opacity-0 transform translate-y-4 h-0'
           }`}>
             {/* Chat Header */}
