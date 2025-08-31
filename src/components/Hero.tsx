@@ -1,88 +1,45 @@
 import React, { useState, useEffect } from 'react';
 
-interface HeroProps {
-  scrollY: number;
-}
+interface HeroProps {}
 
-const Hero: React.FC<HeroProps> = ({ scrollY }) => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showCursor, setShowCursor] = useState(true);
-  
-  // State for cycling business text typewriter
+const Hero: React.FC<HeroProps> = () => {
+  // Business text typewriter state
   const [businessText, setBusinessText] = useState('');
   const [businessIndex, setBusinessIndex] = useState(0);
   const [showBusinessCursor, setShowBusinessCursor] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   
-  const fullText = "Levrin Labs";
   const businessTexts = ["Family Owned Businesses", "Personal Firms & Agencies", "Local Practices & Enterprises", "Independent Shops & Boutiques"];
   const currentBusinessText = businessTexts[currentTextIndex];
   
-  useEffect(() => {
-    // Start animation after 1.5 second delay
-    const startDelay = setTimeout(() => {
-      if (currentIndex < fullText.length) {
-        const timer = setTimeout(() => {
-          setDisplayedText(fullText.slice(0, currentIndex + 1));
-          setCurrentIndex(currentIndex + 1);
-        }, 120); // Clean, measured typing pace
-        return () => clearTimeout(timer);
-      } else if (currentIndex >= fullText.length) {
-        // Hide cursor when typing is complete
-        setShowCursor(false);
-      }
-    }, currentIndex === 0 ? 1500 : 0);
-    
-    return () => clearTimeout(startDelay);
-  }, [currentIndex, fullText]);
-  
-  useEffect(() => {
-    // Only blink cursor while typing is in progress
-    if (currentIndex < fullText.length) {
-      const cursorTimer = setInterval(() => {
-        setShowCursor(prev => !prev);
-      }, 700); // Slower, more elegant blink
-      return () => clearInterval(cursorTimer);
-    } else {
-      // Keep cursor hidden when typing is complete
-      setShowCursor(false);
-    }
-  }, [currentIndex, fullText.length]);
-
-  // Animation for cycling business text with delete/retype
+  // Business text animation
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     
-    // Immediate switch to next text after deletion completes
     if (isDeleting && businessIndex === 0) {
       setIsDeleting(false);
       setCurrentTextIndex((prev) => (prev + 1) % businessTexts.length);
       return;
     }
     
-    // Start after "Levrin Labs" animation finishes (3 seconds delay)
-    const initialDelay = businessIndex === 0 && businessText === '' ? 3000 : 0;
+    const initialDelay = businessIndex === 0 && businessText === '' ? 500 : 0;
     
     const startDelay = setTimeout(() => {
       if (!isDeleting && businessIndex < currentBusinessText.length) {
-        // Typing phase
         timer = setTimeout(() => {
           setBusinessText(currentBusinessText.slice(0, businessIndex + 1));
           setBusinessIndex(businessIndex + 1);
         }, 100);
       } else if (!isDeleting && businessIndex === currentBusinessText.length) {
-        // Pause after finishing typing before deleting
         timer = setTimeout(() => {
           setIsDeleting(true);
         }, 1000);
       } else if (isDeleting && businessIndex > 0) {
-        // Deleting phase
         timer = setTimeout(() => {
           setBusinessText(currentBusinessText.slice(0, businessIndex - 1));
           setBusinessIndex(businessIndex - 1);
-        }, 80); // Faster deletion
+        }, 80);
       }
     }, initialDelay);
     
@@ -95,24 +52,14 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
   useEffect(() => {
     const businessCursorTimer = setInterval(() => {
       setShowBusinessCursor(prev => !prev);
-    }, 600); // Different blink speed for variety
+    }, 600);
     return () => clearInterval(businessCursorTimer);
   }, []);
 
   return (
-    <main className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden">
       <div className="relative max-w-7xl w-full px-8 lg:px-16">
         
-       {/* Large Background Text - "Hello!" */}
-       <div 
-          className="flex items-center justify-center opacity-[0.04] pointer-events-none select-none"
-          style={{ transform: `translateY(${scrollY * 0.1}px)` }}
-        >
-          <h1 className="text-[10rem] md:text-[14rem] lg:text-[18rem] xl:text-[22rem] font-extralight leading-none tracking-tight text-gray-900 italic">
-          Hello!
-          </h1>
-        </div>
-
         {/* Main Content */}
         <div className="relative z-10 max-w-4xl -mt-16 md:-mt-20 lg:-mt-24">
           
@@ -120,10 +67,7 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
           <div className="space-y-4">
             <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight tracking-tight text-gray-900">
               We are<br />
-              <span className="font-normal">
-                {displayedText}
-                {showCursor && <span className="text-gray-900">|</span>}
-              </span>
+              <span className="font-normal">Levrok Labs</span>
             </h2>
           </div>
         </div>
@@ -146,7 +90,7 @@ const Hero: React.FC<HeroProps> = ({ scrollY }) => {
       </div>
 
       {/* Tagline with line - Hidden on mobile, visible on larger screens */}
-      <div className="hidden md:block absolute right-10 top-3/4 z-50">
+      <div className="hidden md:block absolute right-30 bottom-10 transform -translate-y-1/2 z-50">
         <div className="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl">
           <div className="flex items-center space-x-6">
             <div className="w-16 h-px bg-gradient-to-r from-gray-900 via-gray-600 to-transparent"></div>

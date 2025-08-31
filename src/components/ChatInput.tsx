@@ -100,7 +100,7 @@ const ChatInput: React.FC = () => {
   };
 
   return (
-    <div className="fixed left-0 right-0 z-40 bottom-0">
+    <div className="fixed left-0 right-0 z-30 bottom-0">
       <div 
         className={`bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl transition-all duration-1000 ease-out overflow-hidden ${
           isExpanded ? 'h-[24rem]' : 'h-auto'
@@ -117,10 +117,10 @@ const ChatInput: React.FC = () => {
               : 'opacity-0 transform translate-y-4 h-0'
           }`}>
             {/* Chat Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-300 border-opacity-30">
-              <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-between p-4 border-b border-gray-300 border-opacity-100">
+              <div className="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-white border border-gray-300">
                 <div className="w-3 h-3 bg-green-900 rounded-full"></div>
-                <h3 className="font-medium text-gay-900">Levrin Labs AI</h3>
+                <h3 className="font-medium text-gray-900">Levrok Labs AI</h3>
               </div>
               <button
                 onClick={handleMinimize}
@@ -134,7 +134,7 @@ const ChatInput: React.FC = () => {
             <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ height: 'calc(100% - 64px)' }}>
               {messages.length === 0 && !isLoading ? (
                 <div className="text-center text-gray-500 py-8">
-                  <p className="text-sm">Start a conversation with Levrin Labs</p>
+                  <p className="text-sm">Start a conversation with Levrok Labs</p>
                 </div>
               ) : (
                 <>
@@ -147,7 +147,7 @@ const ChatInput: React.FC = () => {
                         className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
                           msg.isUser
                             ? 'bg-gray-800 bg-opacity-80 text-white border border-gray-700 border-opacity-50'
-                            : 'bg-white bg-opacity-70 text-gray-900 border border-gray-300 border-opacity-50'
+                            : 'bg-white text-gray-900 border border-gray-300'
                         }`}
                       >
                         <p className="text-sm">
@@ -172,14 +172,14 @@ const ChatInput: React.FC = () => {
                   {/* Loading Animation */}
                   {isLoading && (
                     <div className="flex justify-start">
-                      <div className="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl bg-white bg-opacity-70 border border-gray-300 border-opacity-50">
+                      <div className="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl bg-white border border-gray-300">
                         <div className="flex items-center space-x-2">
                           <div className="flex space-x-1">
                             <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                             <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                             <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                           </div>
-                          {/* <span className="text-xs text-gray-500">Levrin Labs is thinking...</span> */}
+                          {/* <span className="text-xs text-gray-500">Levrok Labs is thinking...</span> */}
                         </div>
                       </div>
                     </div>
@@ -201,7 +201,7 @@ const ChatInput: React.FC = () => {
                   onFocus={handleInputFocus}
                   disabled={isLoading}
                   rows={1}
-                  placeholder={isExpanded ? "Continue the conversation..." : "Ask about Levrin Labs..."}
+                  placeholder={isExpanded ? "Continue the conversation..." : "Ask about Levrok Labs..."}
                   className="w-full px-4 py-3 pr-12 bg-white bg-opacity-50 border border-gray-300 border-opacity-50 rounded-2xl text-gray-900 placeholder-gray-600 resize-none overflow-hidden
                     focus:outline-none focus:border-gray-400 focus:border-opacity-70 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-20 
                     hover:border-gray-400 hover:border-opacity-60 hover:bg-opacity-60
