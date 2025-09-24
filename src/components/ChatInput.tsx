@@ -18,12 +18,13 @@ const ChatInput: React.FC = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [customHeight, setCustomHeight] = useState(384); // 24rem = 384px
   const [isDragging, setIsDragging] = useState(false);
+  const ORIGINAL_HEIGHT = 384; // Add this constant
 
   // Handle vertical drag to resize height - UPDATED for mobile support
   useEffect(() => {
     const handleMove = (clientY: number) => {
       if (isDragging) {
-        const newHeight = Math.max(200, window.innerHeight - clientY);
+        const newHeight = Math.max(ORIGINAL_HEIGHT, window.innerHeight - clientY); // Use original height as floor
         setCustomHeight(newHeight);
       }
     };
@@ -39,9 +40,16 @@ const ChatInput: React.FC = () => {
 
     const handleEnd = () => {
       setIsDragging(false);
+      // Re-enable text selection
+      document.body.style.userSelect = '';
+      document.onselectstart = null;
     };
 
     if (isDragging) {
+      // Disable text selection during drag
+      document.body.style.userSelect = 'none';
+      document.onselectstart = () => false;
+      
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleEnd);
       document.addEventListener('touchmove', handleTouchMove);
@@ -53,6 +61,9 @@ const ChatInput: React.FC = () => {
       document.removeEventListener('mouseup', handleEnd);
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('touchend', handleEnd);
+      // Ensure text selection is re-enabled on cleanup
+      document.body.style.userSelect = '';
+      document.onselectstart = null;
     };
   }, [isDragging]);
 
@@ -143,7 +154,9 @@ const ChatInput: React.FC = () => {
   return (
     <div className="fixed left-0 right-0 z-30 bottom-0">
       <div 
-        className="bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl transition-all duration-1000 ease-out overflow-hidden"
+        className={`bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl overflow-hidden ${
+          isDragging ? '' : 'transition-all duration-1000 ease-out'
+        }`}
         style={{ height: isExpanded ? `${customHeight}px` : 'auto' }}
       >
         <div className="max-w-4xl mx-auto">
