@@ -16,6 +16,46 @@ const ChatInput: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [customHeight, setCustomHeight] = useState(384); // 24rem = 384px
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Handle vertical drag to resize height - UPDATED for mobile support
+  useEffect(() => {
+    const handleMove = (clientY: number) => {
+      if (isDragging) {
+        const newHeight = Math.max(200, window.innerHeight - clientY);
+        setCustomHeight(newHeight);
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      handleMove(e.clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault(); // Prevent scrolling
+      handleMove(e.touches[0].clientY);
+    };
+
+    const handleEnd = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleEnd);
+      document.addEventListener('touchmove', handleTouchMove);
+      document.addEventListener('touchend', handleEnd);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleEnd);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging]);
+
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -89,6 +129,7 @@ const ChatInput: React.FC = () => {
     setTimeout(() => {
       setIsExpanded(false);
       setIsCollapsing(false);
+      setCustomHeight(384);
     }, 500);
   };
 
@@ -102,20 +143,28 @@ const ChatInput: React.FC = () => {
   return (
     <div className="fixed left-0 right-0 z-30 bottom-0">
       <div 
-        className={`bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl transition-all duration-1000 ease-out overflow-hidden ${
-          isExpanded ? 'h-[24rem]' : 'h-auto'
-        }`}
+        className="bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl transition-all duration-1000 ease-out overflow-hidden"
+        style={{ height: isExpanded ? `${customHeight}px` : 'auto' }}
       >
         <div className="max-w-4xl mx-auto">
-          
+          {/* Drag Handle */}
+          {isExpanded && (
+            <div 
+              className={`h-2 w-full cursor-ns-resize hover:bg-gray-300 hover:bg-opacity-50 transition-colors ${
+                isDragging ? 'bg-gray-300 bg-opacity-70' : ''
+              }`}
+              onMouseDown={() => setIsDragging(true)}
+              onTouchStart={() => setIsDragging(true)}
+            />
+          )}
           {/* Expanded Chat Area */}
           <div className={`transition-all duration-1000 ${
             isExpanded 
               ? isCollapsing 
-                ? 'opacity-0 transform translate-y-4 h-[18rem]' 
-                : 'opacity-100 transform translate-y-0 h-[18rem]'
+                ? 'opacity-0 transform translate-y-4' 
+                : 'opacity-100 transform translate-y-0'
               : 'opacity-0 transform translate-y-4 h-0'
-          }`}>
+          }`} style={{ height: isExpanded ? `${customHeight - (window.innerWidth >= 768 ? 120 : 135)}px` : '0' }}>
             {/* Chat Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-300 border-opacity-100">
               <div className="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-white border border-gray-300">
