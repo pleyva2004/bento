@@ -6,7 +6,6 @@ const Hero: React.FC<HeroProps> = () => {
   // Business text typewriter state
   const [businessText, setBusinessText] = useState('');
   const [businessIndex, setBusinessIndex] = useState(0);
-  const [showBusinessCursor, setShowBusinessCursor] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   
@@ -48,13 +47,6 @@ const Hero: React.FC<HeroProps> = () => {
       clearTimeout(timer);
     };
   }, [businessIndex, currentBusinessText, isDeleting, businessText, businessTexts.length]);
-
-  useEffect(() => {
-    const businessCursorTimer = setInterval(() => {
-      setShowBusinessCursor(prev => !prev);
-    }, 600);
-    return () => clearInterval(businessCursorTimer);
-  }, []);
 
   return (
     <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden">
