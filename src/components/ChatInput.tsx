@@ -40,14 +40,20 @@ const ChatInput: React.FC = () => {
 
     const handleEnd = () => {
       setIsDragging(false);
-      // Re-enable text selection
+      // Re-enable text selection - Enhanced for mobile
       document.body.style.userSelect = '';
+      (document.body.style as any).webkitUserSelect = '';
+      (document.body.style as any).webkitTouchCallout = '';
+      (document.body.style as any).webkitTapHighlightColor = '';
       document.onselectstart = null;
     };
 
     if (isDragging) {
-      // Disable text selection during drag
+      // Disable text selection during drag - Enhanced for mobile
       document.body.style.userSelect = 'none';
+      (document.body.style as any).webkitUserSelect = 'none';
+      (document.body.style as any).webkitTouchCallout = 'none';
+      (document.body.style as any).webkitTapHighlightColor = 'transparent';
       document.onselectstart = () => false;
       
       document.addEventListener('mousemove', handleMouseMove);
@@ -61,8 +67,11 @@ const ChatInput: React.FC = () => {
       document.removeEventListener('mouseup', handleEnd);
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('touchend', handleEnd);
-      // Ensure text selection is re-enabled on cleanup
+      // Ensure text selection is re-enabled on cleanup - Enhanced for mobile
       document.body.style.userSelect = '';
+      (document.body.style as any).webkitUserSelect = '';
+      (document.body.style as any).webkitTouchCallout = '';
+      (document.body.style as any).webkitTapHighlightColor = '';
       document.onselectstart = null;
     };
   }, [isDragging]);
