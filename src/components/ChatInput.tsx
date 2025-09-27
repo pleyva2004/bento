@@ -175,8 +175,16 @@ const ChatInput: React.FC = () => {
               className={`h-2 w-full cursor-ns-resize hover:bg-gray-300 hover:bg-opacity-50 transition-colors ${
                 isDragging ? 'bg-gray-300 bg-opacity-70' : ''
               }`}
-              onMouseDown={() => setIsDragging(true)}
-              onTouchStart={() => setIsDragging(true)}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDragging(true);
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDragging(true);
+              }}
             />
           )}
           {/* Expanded Chat Area */}
