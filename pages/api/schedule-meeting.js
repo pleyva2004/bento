@@ -26,14 +26,16 @@ export default async function handler(req, res) {
     const { google } = require('googleapis');
     const path = require('path');
 
-    const CREDENTIALS_PATH = path.join(process.cwd(), 'bento-cloud-service-credentials.json');
+    const CREDENTIALS_PATH = path.join(
+      process.cwd(), 
+      process.env.GOOGLE_CREDENTIALS_PATH || 'bento-cloud-service-credentials.json'
+    );
 
     const SCOPES = ['https://www.googleapis.com/auth/calendar.events.owned'];
 
     const auth = new google.auth.GoogleAuth({
       keyFile: CREDENTIALS_PATH,
       scopes: SCOPES,
-      // subject: 'pleyva2004@sgmail.com'
     });
 
 
@@ -53,16 +55,16 @@ Meeting Details:
 
 This is a no-cost AI audit call to discuss how AI can transform their business.`,
      organizer: {
-      email: 'pleyva2004@sgmail.com',
-      displayName: 'Levrok Labs'
+      email: process.env.ORGANIZER_EMAIL,
+      displayName: process.env.ORGANIZER_NAME || 'Levrok Labs'
     },
       start: {
         dateTime: meetingDate.toISOString(),
-        timeZone: 'America/New_York', // Adjust to your timezone
+        timeZone: process.env.CALENDAR_TIMEZONE || 'America/New_York',
       },
       end: {
         dateTime: endDate.toISOString(),
-        timeZone: 'America/New_York', // Adjust to your timezone
+        timeZone: process.env.CALENDAR_TIMEZONE || 'America/New_York',
       },
       attendees: [
         // { email: email }, // Add the client as an attendee
@@ -81,10 +83,14 @@ This is a no-cost AI audit call to discuss how AI can transform their business.`
     // Get the authenticated client
     const calendar = google.calendar({ version: 'v3', auth: auth });
 
-    const calID = '1591f6c552214b6d67035a03a57caa529a2b87848b98ae6f7dfa771c3a05882b@group.calendar.google.com'
+    const calID = process.env.GOOGLE_CALENDAR_ID;
+    
+    if (!calID) {
+      throw new Error('GOOGLE_CALENDAR_ID environment variable is required');
+    }
    
     const response = await calendar.events.insert({
-      calendarId: calID, // or your specific calendar ID
+      calendarId: calID,
       resource: calendarEvent,
       conferenceDataVersion: 1, // Required for creating Meet links
       sendUpdates: 'all', // Send invites to all attendees,      
@@ -130,7 +136,10 @@ async function getMeetLink() {
   const { google } = require('googleapis');
   const path = require('path');
 
-  const CREDENTIALS_PATH = path.join(process.cwd(), 'bento-cloud-service-credentials.json');
+  const CREDENTIALS_PATH = path.join(
+    process.cwd(), 
+    process.env.GOOGLE_CREDENTIALS_PATH || 'bento-cloud-service-credentials.json'
+  );
 
   const SCOPES2 = ['https://www.googleapis.com/auth/meetings.space.created'];
 
@@ -182,8 +191,8 @@ What to Expect:
 Looking forward to helping you transform your business with AI!
 
 Best regards,
-The Levrok Labs Team
-hello@levroklabs.com
+The ${process.env.ORGANIZER_NAME || 'Levrok Labs'} Team
+${process.env.SUPPORT_EMAIL || 'hello@levroklabs.com'}
   `;
 
   // Implement actual email sending here
@@ -199,9 +208,9 @@ hello@levroklabs.com
   });
   
   await transporter.sendMail({
-    from: 'hello@levroklabs.com',
+    from: process.env.SUPPORT_EMAIL || 'hello@levroklabs.com',
     to: to,
-    subject: 'AI Consultation Scheduled - Levrok Labs',
+    subject: `AI Consultation Scheduled - ${process.env.ORGANIZER_NAME || 'Levrok Labs'}`,
     text: emailContent,
   });
   */
