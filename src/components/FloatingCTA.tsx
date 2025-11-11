@@ -20,15 +20,15 @@ const FloatingCTA: React.FC = () => {
 
   return (
     <>
-      <div className="fixed top-20 right-4 md:top-auto md:bottom-4 lg:bottom-8 md:right-8 z-40">
-        <button 
+      <div className="fixed top-20 right-4 md:top-10 md:bottom-auto md:right-8 z-40">
+        <button
           onClick={handleOpenModal}
           className={`
-            bg-gray-900 text-white 
-            px-4 sm:px-6 lg:px-8 py-3 sm:py-4 
-            rounded-full 
+            bg-gray-900 text-white
+            px-4 sm:px-6 lg:px-8 py-3 sm:py-4
+            rounded-full
             text-xs sm:text-sm font-medium tracking-wide
-            hover:bg-gray-800 
+            hover:bg-gray-800
             transition-all duration-300 ease-out
             shadow-lg hover:shadow-xl
             flex items-center space-x-2 sm:space-x-3
@@ -39,9 +39,9 @@ const FloatingCTA: React.FC = () => {
             ${isModalOpen ? 'opacity-50 pointer-events-none' : 'opacity-100'}
           `}
         >
-          <span 
+          <span
             className={`
-              w-2 h-2 bg-white rounded-full opacity-60 group-hover:opacity-100 
+              w-2 h-2 bg-white rounded-full opacity-60 group-hover:opacity-100
               transition-all duration-300 flex-shrink-0
               ${isClicked ? 'animate-pulse' : ''}
             `}
@@ -50,9 +50,9 @@ const FloatingCTA: React.FC = () => {
         </button>
       </div>
 
-      <SchedulingModal 
-        isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
+      <SchedulingModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
       />
     </>
   );

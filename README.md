@@ -1,24 +1,26 @@
-# Neural Strategies - AI Agency Landing Page
+# Levrok Labs - AI Consulting Landing Page
 
-A modern, minimal landing page inspired by the Lexor Strategies design, built for AI agencies using React, TypeScript, and Tailwind CSS.
+A modern, minimal landing page for Levrok Labs, an AI consulting company specializing in helping family-owned businesses implement AI solutions. Built with Next.js, React, TypeScript, and Tailwind CSS.
 
 ## ✨ Features
 
-- **Minimal Design**: Clean, typography-focused layout inspired by premium agencies
-- **Minimal Dependencies**: Only essential packages (React + Vite + Tailwind)
+- **AI Chat Interface**: Interactive chatbot powered by OpenAI GPT-3.5
+- **Meeting Scheduling**: Integrated Google Calendar booking system
+- **Minimal Design**: Clean, typography-focused layout
 - **Responsive**: Optimized for all device sizes
-- **Modern Tech Stack**: React 18, TypeScript, Tailwind CSS, Vite
-- **Smooth Animations**: Parallax scrolling and subtle transitions
+- **Modern Tech Stack**: Next.js 14, React 18, TypeScript, Tailwind CSS
+- **Smooth Animations**: Elegant transitions and loading states
 - **Professional Aesthetic**: Perfect for high-end AI consulting services
 
 ## 🚀 Quick Start
 
 ```bash
-# Remove old node_modules and package-lock.json (if switching from CRA)
-rm -rf node_modules package-lock.json
-
 # Install dependencies
 npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your API keys and configuration
 
 # Start development server
 npm run dev
@@ -26,29 +28,35 @@ npm run dev
 # Build for production
 npm run build
 
-# Preview production build
-npm run preview
+# Start production server
+npm start
 ```
 
-## 📦 Minimal Dependencies
+## 📦 Dependencies
 
-This project uses only essential dependencies:
+This project uses the following key dependencies:
 
 ```json
 {
   "dependencies": {
+    "@google-apps/meet": "^0.7.0",
+    "@google-cloud/local-auth": "^2.1.1",
+    "googleapis": "^105.0.0",
+    "next": "^14.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5.0.0",
-    "vite": "^5.0.0"
+    "typescript": "^5.0.0"
   }
 }
 ```
@@ -56,24 +64,31 @@ This project uses only essential dependencies:
 ## 📁 Project Structure
 
 ```
-├── index.html             # Vite entry point
+├── pages/
+│   ├── api/
+│   │   ├── chat.js              # OpenAI chat API endpoint
+│   │   └── schedule-meeting.js  # Google Calendar integration
+│   ├── _app.js                  # Next.js app wrapper
+│   ├── _document.js             # Custom document
+│   └── index.js                 # Home page
 ├── src/
 │   ├── components/
-│   │   ├── About.tsx          # About section with skills
-│   │   ├── Contact.tsx        # Contact form and info
-│   │   ├── FloatingCTA.tsx    # Bottom-right CTA button
-│   │   ├── Hero.tsx           # Main hero section
-│   │   ├── Logo.tsx           # Top-left logo
-│   │   ├── Services.tsx       # AI services showcase
-│   │   └── Sidebar.tsx        # Vertical navigation
-│   ├── App.tsx                # Main app component
-│   ├── index.css              # Global styles and fonts
-│   └── index.tsx              # App entry point
+│   │   ├── CalendarPicker.tsx   # Date/time picker
+│   │   ├── ChatInput.tsx        # AI chat interface
+│   │   ├── ConfirmationScreen.tsx # Booking confirmation
+│   │   ├── FloatingCTA.tsx      # Floating CTA button
+│   │   ├── Hero.tsx             # Main hero section
+│   │   ├── Logo.tsx             # Top-left logo
+│   │   ├── SchedulingForm.tsx   # Meeting form
+│   │   ├── SchedulingModal.tsx  # Booking modal
+│   │   ├── Sidebar.tsx          # Navigation sidebar
+│   │   └── TryOurAI.tsx         # Decorative element
+│   └── index.css                # Global styles and fonts
 ├── package.json
 ├── tailwind.config.js
 ├── tsconfig.json
-├── tsconfig.node.json
-└── vite.config.ts
+├── next.config.js
+└── .env.example
 ```
 
 ## 🎨 Design Features
@@ -95,24 +110,46 @@ This project uses only essential dependencies:
 3. **Services** - AI solutions in card layout
 4. **Contact** - Contact form and information
 
-## 🛠 Customization
+## 🔧 Configuration
 
-### Update Agency Name
-Replace "Neural Strategies" in:
-- `src/components/Hero.tsx` (line 24)
-- `src/components/About.tsx` (line 8)
+### Environment Variables
 
-### Update Logo
-Change the logo text in `src/components/Logo.tsx` (line 6):
-```tsx
-<span className="text-white text-lg font-bold tracking-tight">AI</span>
+Create a `.env` file in the project root with the following variables:
+
+```bash
+OPENAI_API_KEY=your_openai_api_key_here
+GOOGLE_CALENDAR_ID=your_calendar_id@group.calendar.google.com
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@project.iam.gserviceaccount.com
 ```
 
-### Update Contact Information
-Modify contact details in `src/components/Contact.tsx` (lines 20-30)
+### Google Calendar Setup
 
-### Update Services
-Edit the services array in `src/components/Services.tsx` (lines 4-22)
+1. Create a Google Cloud project
+2. Enable the Google Calendar API
+3. Create a service account and download credentials as `bento-cloud-service-credentials.json`
+4. Place the credentials file in the project root
+5. Share your Google Calendar with the service account email
+
+### OpenAI Setup
+
+1. Sign up for an OpenAI account
+2. Generate an API key from the dashboard
+3. Add the key to your `.env` file
+
+## 🛠 Customization
+
+### Update Company Name
+Change "Levrok Labs" in:
+- `src/components/Hero.tsx`
+- `src/components/ChatInput.tsx`
+- `pages/api/chat.js` (system prompt)
+- `pages/api/schedule-meeting.js`
+
+### Update Logo
+Modify the logo in `src/components/Logo.tsx`
+
+### Customize AI Prompt
+Edit the system prompt in `pages/api/chat.js` to match your business
 
 ## 🎯 Key Design Principles
 
@@ -129,34 +166,42 @@ Edit the services array in `src/components/Services.tsx` (lines 4-22)
 
 ## 🔧 Technical Details
 
-- **Vite**: Lightning-fast development and building
+- **Next.js 14**: Server-side rendering and API routes
 - **React 18**: Latest React features and performance
 - **TypeScript**: Type safety and better developer experience
 - **Tailwind CSS**: Utility-first styling approach
-- **CSS Grid/Flexbox**: Modern layout techniques
-- **Custom Animations**: Smooth parallax and transitions
+- **OpenAI API**: GPT-3.5 powered chatbot
+- **Google Calendar API**: Automated meeting scheduling
+- **Custom Animations**: Smooth transitions and loading states
 
 ## 🚀 Deployment
 
-The app is ready for deployment to any static hosting service:
+Deploy to Vercel (recommended for Next.js):
 
 ```bash
-npm run build
-# Deploy the 'dist' folder to your hosting service
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+
+# Or connect your GitHub repo to Vercel for automatic deployments
 ```
 
-Perfect for:
+Also compatible with:
 - Netlify
-- Vercel
-- GitHub Pages
-- AWS S3 + CloudFront
+- AWS Amplify
+- Railway
+- Any Node.js hosting platform
 
-## ⚡ Why Vite?
+**Important**: Make sure to set your environment variables in your hosting platform's dashboard.
 
-- **Faster Development**: Instant server start and HMR
-- **Smaller Bundle**: Optimized production builds
-- **Modern**: Built for modern browsers
-- **Simple**: Less configuration than CRA
+## 🔒 Security Notes
+
+- Never commit `.env` or `bento-cloud-service-credentials.json` to version control
+- Add these files to `.gitignore`
+- Store sensitive credentials in your hosting platform's environment variables
+- Consider implementing rate limiting for API routes in production
 
 ## 🎨 Color Scheme
 

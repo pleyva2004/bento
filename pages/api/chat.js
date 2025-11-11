@@ -9,8 +9,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Message is required' });
   }
 
-  const system_prompt = `You are an AI assistant for Levrok Labs, an AI consulting company specializing in helping family-owned businesses implement AI solutions. 
-Answer in short sentences, use bullet points if more information is needed. 
+  const system_prompt = `You are an AI assistant for Levrok Labs, an AI consulting company specializing in helping family-owned businesses implement AI solutions.
+Answer in short sentences, use bullet points if more information is needed.
 Do not be redundant, do not repeat the same information. Only say information once.
 Format: If it is a simple and quick answer, write the response as a Markdown bullet list, with each item on a new line. Ensure that the bullet points are indented.
 If it is a long answer, write 2-3 sentences, and bullet points if more information is needed. Use minimal Markdown. Only for headers and bullet points and italics if needed.`
