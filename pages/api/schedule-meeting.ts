@@ -1,33 +1,44 @@
-// API endpoint for scheduling meetings with Google Calendar integration
-// You'll need to install: npm install googleapis nodemailer
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { google } from 'googleapis';
+import * as path from 'path';
+import type {
+  ScheduleMeetingResponse,
+  ScheduleMeetingErrorResponse,
+  EmailParams,
+  NotificationParams,
+} from './types';
+import { isScheduleMeetingRequest } from './types';
+import type { CalendarEventData } from './google-calendar-types';
 
-export default async function handler(req, res) {
+type ScheduleApiResponse = ScheduleMeetingResponse | ScheduleMeetingErrorResponse;
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ScheduleApiResponse>
+): Promise<void> {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const { selectedDate, selectedTime, name, email, companyName, companyNiche } = req.body;
-
-  // Validate required fields
-  if (!selectedDate || !selectedTime || !name || !email || !companyName || !companyNiche) {
+  // Validate request body with type guard
+  if (!isScheduleMeetingRequest(req.body)) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
+
+  const { selectedDate, selectedTime, name, email, companyName, companyNiche } = req.body;
 
   try {
     // Create the meeting date/time
     const meetingDate = new Date(selectedDate);
     const [hours, minutes] = selectedTime.split(':');
-    meetingDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-    
-    // End time (30 minute later)
+    meetingDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+
+    // End time (30 minutes later)
     const endDate = new Date(meetingDate);
     endDate.setMinutes(endDate.getMinutes() + 30);
 
-    const { google } = require('googleapis');
-    const path = require('path');
-
     const CREDENTIALS_PATH = path.join(
-      process.cwd(), 
+      process.cwd(),
       process.env.GOOGLE_CREDENTIALS_PATH || 'bento-cloud-service-credentials.json'
     );
 
@@ -38,11 +49,7 @@ export default async function handler(req, res) {
       scopes: SCOPES,
     });
 
-
-    // const meetLink = await getMeetLink();
-
-    // Create calendar event data with integrated Meet link
-    const calendarEvent = {
+    const calendarEvent: CalendarEventData = {
       summary: `AI Consultation - ${companyName}`,
       description: `AI consultation call with ${name} from ${companyName} (${companyNiche} industry).
 
@@ -54,10 +61,10 @@ Meeting Details:
 
 
 This is a no-cost AI audit call to discuss how AI can transform their business.`,
-     organizer: {
-      email: process.env.ORGANIZER_EMAIL,
-      displayName: process.env.ORGANIZER_NAME || 'Levrok Labs'
-    },
+      organizer: {
+        email: process.env.ORGANIZER_EMAIL || '',
+        displayName: process.env.ORGANIZER_NAME || 'Levrok Labs',
+      },
       start: {
         dateTime: meetingDate.toISOString(),
         timeZone: process.env.CALENDAR_TIMEZONE || 'America/New_York',
@@ -66,41 +73,35 @@ This is a no-cost AI audit call to discuss how AI can transform their business.`
         dateTime: endDate.toISOString(),
         timeZone: process.env.CALENDAR_TIMEZONE || 'America/New_York',
       },
-      attendees: [
-        // { email: email }, // Add the client as an attendee
-      ],      
+      attendees: [],
       reminders: {
         useDefault: false,
         overrides: [
-          { method: 'email', minutes: 24 * 60 }, // 1 day before
-          { method: 'email', minutes: 60 }, // 1 hour before
-          { method: 'popup', minutes: 15 }, // 15 minutes before
-          { method: 'popup', minutes: 5 }, // 5 minutes before
+          { method: 'email', minutes: 24 * 60 },
+          { method: 'email', minutes: 60 },
+          { method: 'popup', minutes: 15 },
+          { method: 'popup', minutes: 5 },
         ],
       },
     };
 
-    // Get the authenticated client
-    const calendar = google.calendar({ version: 'v3', auth: auth });
+    const calendar = google.calendar({ version: 'v3', auth });
 
     const calID = process.env.GOOGLE_CALENDAR_ID;
-    
+
     if (!calID) {
       throw new Error('GOOGLE_CALENDAR_ID environment variable is required');
     }
-   
+
     const response = await calendar.events.insert({
       calendarId: calID,
-      resource: calendarEvent,
-      conferenceDataVersion: 1, // Required for creating Meet links
-      sendUpdates: 'all', // Send invites to all attendees,      
+      requestBody: calendarEvent,
+      conferenceDataVersion: 1,
+      sendUpdates: 'all',
     });
 
-    console.log('Calendar event created:', response);
+    console.log('Calendar event created:', response.data);
 
-    // Get the Meet link from the response
-
-    // For demonstration, we'll send a simple email notification
     await sendConfirmationEmail({
       to: email,
       name,
@@ -109,64 +110,58 @@ This is a no-cost AI audit call to discuss how AI can transform their business.`
       meetingTime: selectedTime,
     });
 
-    // Also notify your team
     await sendInternalNotification({
       name,
       email,
       companyName,
       companyNiche,
       meetingDate,
-      meetingTime: selectedTime
+      meetingTime: selectedTime,
     });
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: 'Meeting scheduled successfully',
-      meetingId: `meeting-${Date.now()}` // In real implementation, use the Google Calendar event ID
+      meetingId: `meeting-${Date.now()}`,
     });
-
   } catch (error) {
     console.error('Error scheduling meeting:', error);
-    res.status(500).json({ message: 'Failed to schedule meeting' });
+    const errorMessage = error instanceof Error ? error.message : 'Failed to schedule meeting';
+    res.status(500).json({ message: errorMessage });
   }
-  
 }
 
-async function getMeetLink() {
-  const {SpacesServiceClient} = require('@google-apps/meet');
-  const { google } = require('googleapis');
-  const path = require('path');
+// Commented out - currently unused but kept for future Meet link integration
+// async function getMeetLink(): Promise<string> {
+//   const { SpacesServiceClient } = require('@google-apps/meet');
+//
+//   const CREDENTIALS_PATH = path.join(
+//     process.cwd(),
+//     process.env.GOOGLE_CREDENTIALS_PATH || 'bento-cloud-service-credentials.json'
+//   );
+//
+//   const SCOPES2 = ['https://www.googleapis.com/auth/meetings.space.created'];
+//
+//   const auth2 = new google.auth.GoogleAuth({
+//     keyFile: CREDENTIALS_PATH,
+//     scopes: SCOPES2,
+//   });
+//
+//   const meetClient = new SpacesServiceClient({
+//     authClient: auth2,
+//   });
+//
+//   const request = {};
+//
+//   const meetResponse = await meetClient.createSpace(request);
+//
+//   console.log(`Meet URL Created: ${meetResponse[0].meetingUri}`);
+//
+//   return meetResponse[0].meetingUri as string;
+// }
 
-  const CREDENTIALS_PATH = path.join(
-    process.cwd(), 
-    process.env.GOOGLE_CREDENTIALS_PATH || 'bento-cloud-service-credentials.json'
-  );
+async function sendConfirmationEmail(params: EmailParams): Promise<void> {
+  const { to, name, companyName, meetingDate, meetingTime } = params;
 
-  const SCOPES2 = ['https://www.googleapis.com/auth/meetings.space.created'];
-
-  const auth2 = new google.auth.GoogleAuth({
-    keyFile: CREDENTIALS_PATH,
-    scopes: SCOPES2,
-  });
-
-  const meetClient = new SpacesServiceClient({
-    authClient: auth2,
-  });
-
-  const request = {};
-
-  const meetResponse = await meetClient.createSpace(request);
-
-  console.log(`Meet URL Created: ${meetResponse[0].meetingUri}`);
-
-  return meetResponse[0].meetingUri;
-
-}
-
-
-async function sendConfirmationEmail({ to, name, companyName, meetingDate, meetingTime }) {
-  // Email sending logic using nodemailer or your preferred email service
-  // This is a simplified example - you'll need to set up your email service
-  
   const emailContent = `
 Dear ${name},
 
@@ -177,7 +172,7 @@ Meeting Details:
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   })}
 ⏰ Time: ${meetingTime}
 🏢 Company: ${companyName}
@@ -195,10 +190,9 @@ The ${process.env.ORGANIZER_NAME || 'Levrok Labs'} Team
 ${process.env.SUPPORT_EMAIL || 'hello@levroklabs.com'}
   `;
 
-  // Implement actual email sending here
   console.log('Sending confirmation email to:', to);
   console.log('Email content:', emailContent);
-  
+
   // Example with nodemailer (you'll need to configure this):
   /*
   const nodemailer = require('nodemailer');
@@ -216,9 +210,9 @@ ${process.env.SUPPORT_EMAIL || 'hello@levroklabs.com'}
   */
 }
 
+async function sendInternalNotification(params: NotificationParams): Promise<void> {
+  const { name, email, companyName, companyNiche, meetingDate, meetingTime } = params;
 
-async function sendInternalNotification({ name, email, companyName, companyNiche, meetingDate, meetingTime }) {
-  // Send notification to your team about the new meeting
   const internalContent = `
 New AI Consultation Scheduled!
 
@@ -234,6 +228,5 @@ Prepare for the call by researching their industry and potential AI use cases.
   `;
 
   console.log('Internal notification:', internalContent);
-  
-  // Send to your team's Slack, email, or notification system
 }
+
