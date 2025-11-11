@@ -3,16 +3,24 @@ import React from 'react';
 const Hero: React.FC = () => {
   return (
     <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden">
-      <div className="relative max-w-7xl w-full px-8 lg:px-16">
+      {/* Top Centered Text */}
+      <div className="absolute top-[120px] sm:top-[120px] md:top-[140px] left-0 right-0 text-center z-10">
+        <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 font-light tracking-widest uppercase text-balance">
+          [ LEVROK Labs - Intelligent Data Systems ]
+        </p>
+      </div>
 
+      <div className="relative max-w-7xl w-full px-8 md:pl-24 lg:pl-32 lg:pr-16">
         {/* Main Content */}
-        <div className="relative z-10 max-w-4xl -mt-16 md:-mt-20 lg:-mt-24">
+        <div className="relative z-10 max-w-4xl">
 
           {/* Main Heading */}
-          <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight tracking-tight text-gray-900">
-              We are<br />
-              <span className="font-normal">Levrok Labs</span>
+          <div className="space-y-0">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-none tracking-tight">
+              <div className="text-gray-900">WE BUILD</div>
+              <div className="text-gray-500">[SYSTEMS]</div>
+              <div className="text-gray-700">FOR COMPLEX</div>
+              <div className="text-gray-400">ORGANIZATIONS</div>
             </h2>
           </div>
         </div>

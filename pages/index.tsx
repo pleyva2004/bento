@@ -4,7 +4,7 @@ import Hero from '../src/components/Hero';
 import FloatingCTA from '../src/components/FloatingCTA';
 import Logo from '../src/components/Logo';
 import ChatInput from '../src/components/ChatInput';
-import TryOurAI from '../src/components/TryOurAI';
+// import TryOurAI from '../src/components/TryOurAI';
 
 export default function Home() {
     const [currentSection, setCurrentSection] = useState<string>('home');
@@ -18,7 +18,7 @@ export default function Home() {
             />
             <Hero />
             <FloatingCTA />
-            <TryOurAI />
+            {/* <TryOurAI /> */}
             <ChatInput />
         </div>
     );

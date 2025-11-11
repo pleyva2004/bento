@@ -20,7 +20,7 @@ const FloatingCTA: React.FC = () => {
 
   return (
     <>
-      <div className="fixed top-20 right-4 md:top-10 md:bottom-auto md:right-8 z-40">
+      <div className="fixed bottom-[145px] right-4 md:top-10 md:bottom-auto md:right-8 z-30">
         <button
           onClick={handleOpenModal}
           className={`
