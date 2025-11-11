@@ -16,10 +16,14 @@ const Hero: React.FC = () => {
 
           {/* Main Heading */}
           <div className="space-y-0">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-none tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-7xl 2xl:text-7xl font-bold leading-none tracking-tight space-y-1 md:space-y-1.5 lg:space-y-2">
               <div className="text-gray-900">WE BUILD</div>
-              <div className="text-gray-500">[SYSTEMS]</div>
-              <div className="text-gray-700">FOR COMPLEX</div>
+              <div>
+                <span className="text-gray-500">[</span>
+                <span className="text-gray-900">INTELLIGENCE</span>
+                <span className="text-gray-500">]</span>
+              </div>
+              <div className="text-gray-700">FOR GROWING</div>
               <div className="text-gray-400">ORGANIZATIONS</div>
             </h2>
           </div>
