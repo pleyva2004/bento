@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hero: React.FC = () => {
   return (
-    <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden">
+    <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-20 sm:pt-36 md:pt-40">
       {/* Top Centered Text */}
       <div className="absolute top-[120px] sm:top-[120px] md:top-[140px] left-0 right-0 text-center z-10">
         <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 font-light tracking-widest uppercase text-balance">
@@ -16,7 +16,7 @@ const Hero: React.FC = () => {
 
           {/* Main Heading */}
           <div className="space-y-0">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-7xl 2xl:text-7xl font-bold leading-none tracking-tight space-y-1 md:space-y-1.5 lg:space-y-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-6xl font-bold leading-none tracking-tight space-y-1 md:space-y-1.5 lg:space-y-2">
               <div className="text-gray-900">WE BUILD</div>
               <div>
                 <span className="text-gray-500">[</span>
@@ -30,7 +30,7 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Subheading */}
-        <div className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-2xl 2xl:text-2xl text-gray-600 font-light tracking-wide mt-6">
+        <div className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-xl text-gray-600 font-light tracking-wide mt-6">
           Using intelligence to scale and improve decision-making
         </div>
 
@@ -39,7 +39,7 @@ const Hero: React.FC = () => {
           {/* Primary Button - Get Started with Levrok */}
           <a
             href="/levrok"
-            className="group relative px-6 py-4 sm:px-7 sm:py-4.5 md:px-9 md:py-5 bg-gray-100 text-gray-900 font-medium text-sm sm:text-base md:text-lg inline-flex items-center justify-center hover:bg-gray-200 transition-all duration-300 border border-gray-300 uppercase tracking-wide overflow-hidden"
+            className="group relative px-6 py-3.5 sm:px-7 sm:py-4 md:px-8 md:py-4 bg-gray-100 text-gray-900 font-medium text-sm sm:text-base md:text-base inline-flex items-center justify-center hover:bg-gray-200 transition-all duration-300 border border-gray-300 uppercase tracking-wide overflow-hidden"
             style={{ clipPath: 'polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px)' }}
           >
             {/* Top-left diagonal line */}
@@ -79,7 +79,7 @@ const Hero: React.FC = () => {
           {/* Secondary Button - Explore Insights */}
           <a
             href="/blog"
-            className="group text-gray-700 font-light text-sm sm:text-base md:text-lg inline-flex items-center justify-center hover:text-gray-900 transition-all duration-300 uppercase tracking-wide py-4 sm:py-4.5 md:py-5"
+            className="group text-gray-700 font-light text-sm sm:text-base md:text-base inline-flex items-center justify-center hover:text-gray-900 transition-all duration-300 uppercase tracking-wide py-3.5 sm:py-4 md:py-4"
           >
             EXPLORE INSIGHTS
 
