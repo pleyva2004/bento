@@ -2,16 +2,15 @@ import React from 'react';
 
 const Hero: React.FC = () => {
   return (
-    <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-20 sm:pt-36 md:pt-40">
+    <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-[10px] sm:pt-[124px] md:pt-[140px]">
       {/* Top Centered Text */}
-      <div className="absolute top-[120px] sm:top-[120px] md:top-[140px] left-0 right-0 text-center z-10">
+      <div className="absolute top-[100px] sm:top-[110px] md:top-[130px] left-0 right-0 text-center z-10">
         <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 font-light tracking-widest uppercase text-balance">
           [ LEVROK Labs - Intelligent Data Systems ]
         </p>
       </div>
 
-      <div className="relative max-w-7xl w-full px-8 md:pl-24 lg:pl-32 lg:pr-16">
-        {/* Main Content */}
+      <div className="relative max-w-7xl w-full px-8 md:pl-24 lg:pl-32 lg:pr-16 -mt-20">        {/* Main Content */}
         <div className="relative z-10 max-w-4xl">
 
           {/* Main Heading */}
