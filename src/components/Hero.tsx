@@ -29,6 +29,79 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
+        {/* Subheading */}
+        <div className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-2xl 2xl:text-2xl text-gray-600 font-light tracking-wide mt-6">
+          Using intelligence to scale and improve decision-making
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-wrap items-center gap-4 sm:gap-5 md:gap-6 mt-8 sm:mt-10 md:mt-12">
+          {/* Primary Button - Get Started with Levrok */}
+          <a
+            href="/levrok"
+            className="group relative px-6 py-4 sm:px-7 sm:py-4.5 md:px-9 md:py-5 bg-gray-100 text-gray-900 font-medium text-sm sm:text-base md:text-lg inline-flex items-center justify-center hover:bg-gray-200 transition-all duration-300 border border-gray-300 uppercase tracking-wide overflow-hidden"
+            style={{ clipPath: 'polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px)' }}
+          >
+            {/* Top-left diagonal line */}
+            <div className="absolute top-1 left-1 pointer-events-none">
+              <svg width="16" height="16" fill="none" stroke="rgba(0, 0, 0, 0.3)" strokeWidth="1.5">
+                <line x1="14" y1="0" x2="0" y2="14" />
+              </svg>
+            </div>
+
+            {/* Bottom-right diagonal line */}
+            <div className="absolute bottom-1 right-1 pointer-events-none">
+              <svg width="16" height="16" fill="none" stroke="rgba(0, 0, 0, 0.3)" strokeWidth="1.5">
+                <line x1="0" y1="14" x2="14" y2="0" />
+              </svg>
+            </div>
+
+            GET STARTED WITH LEVROK
+
+            {/* Arrow Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-arrow-up-right ml-2 sm:ml-2.5 md:ml-3 w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" />
+            </svg>
+          </a>
+
+          {/* Secondary Button - Explore Insights */}
+          <a
+            href="/blog"
+            className="group text-gray-700 font-light text-sm sm:text-base md:text-lg inline-flex items-center justify-center hover:text-gray-900 transition-all duration-300 uppercase tracking-wide py-4 sm:py-4.5 md:py-5"
+          >
+            EXPLORE INSIGHTS
+
+            {/* Arrow Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-arrow-up-right ml-2 sm:ml-2.5 md:ml-3 w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" />
+            </svg>
+          </a>
+        </div>
+
       </div>
     </main>
   );
