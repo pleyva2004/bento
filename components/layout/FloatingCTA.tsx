@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
-import SchedulingModal from './SchedulingModal';
+import SchedulingModal from '../features/SchedulingModal';
 
 const FloatingCTA: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,3 +61,4 @@ const FloatingCTA: React.FC = () => {
 };
 
 export default FloatingCTA;
+

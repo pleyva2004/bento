@@ -1,10 +1,12 @@
+'use client';
+
 import { useState } from 'react';
-import Sidebar from '../src/components/Sidebar';
-import Hero from '../src/components/Hero';
-import FloatingCTA from '../src/components/FloatingCTA';
-import Logo from '../src/components/Logo';
-import ChatInput from '../src/components/ChatInput';
-// import TryOurAI from '../src/components/TryOurAI';
+import Sidebar from '@/components/layout/Sidebar';
+import Hero from '@/components/sections/Hero';
+import FloatingCTA from '@/components/layout/FloatingCTA';
+import Logo from '@/components/layout/Logo';
+import ChatInput from '@/components/features/ChatInput';
+// import TryOurAI from '@/components/features/TryOurAI';
 
 export default function Home() {
     const [currentSection, setCurrentSection] = useState<string>('home');

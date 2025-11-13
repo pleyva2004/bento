@@ -26,7 +26,7 @@ const Services: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-light tracking-tight text-gray-900">
             AI Solutions
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <div key={index} className="space-y-4 group cursor-pointer">
@@ -52,3 +52,4 @@ const Services: React.FC = () => {
 };
 
 export default Services;
+

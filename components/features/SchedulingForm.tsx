@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 interface SchedulingFormProps {
@@ -56,7 +58,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       onSubmit(formData);
     }
@@ -88,7 +90,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
       { value: '16:00', display: '4:00 PM' },
       { value: '16:30', display: '4:30 PM' }
     ];
-    
+
     const timeSlot = timeSlots.find(slot => slot.value === time24);
     return timeSlot ? timeSlot.display : time24;
   };
@@ -238,3 +240,4 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
 };
 
 export default SchedulingForm;
+

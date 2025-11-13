@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import CalendarPicker from './CalendarPicker';
 import SchedulingForm from './SchedulingForm';
@@ -46,7 +48,7 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
 
   const handleDateTimeSelect = (date: Date, time: string) => {
     setSchedulingData(prev => ({ ...prev, selectedDate: date, selectedTime: time }));
-    
+
     // Add smooth transition between steps
     setIsAnimating(true);
     setTimeout(() => {
@@ -57,10 +59,14 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
 
   const handleFormSubmit = async (formData: Omit<SchedulingData, 'selectedDate' | 'selectedTime'>) => {
     setIsSubmitting(true);
-    
+
     const completeData = {
-      ...schedulingData,
-      ...formData
+      selectedDate: schedulingData.selectedDate?.toISOString().split('T')[0] || '',
+      selectedTime: schedulingData.selectedTime,
+      name: formData.name,
+      email: formData.email,
+      companyName: formData.companyName,
+      companyNiche: formData.companyNiche,
     };
 
     try {
@@ -73,8 +79,8 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
       });
 
       if (response.ok) {
-        setSchedulingData(completeData);
-        
+        setSchedulingData(prev => ({ ...prev, ...formData }));
+
         // Smooth transition to confirmation
         setIsAnimating(true);
         setTimeout(() => {
@@ -120,19 +126,19 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
   if (!isVisible) return null;
 
   return (
-    <div 
+    <div
       className={`
         fixed inset-0 bg-black flex items-center justify-center z-50 p-4
         transition-all duration-300 ease-out
         ${isOpen && !isAnimating ? 'bg-opacity-50' : 'bg-opacity-0'}
       `}
     >
-      <div 
+      <div
         className={`
           bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[95vh] overflow-hidden
           transition-all duration-300 ease-out transform
-          ${isOpen && !isAnimating 
-            ? 'opacity-100 scale-100 translate-y-0' 
+          ${isOpen && !isAnimating
+            ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-95 translate-y-4'
           }
         `}
@@ -169,22 +175,22 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
           <div className="flex items-center space-x-2">
             {['calendar', 'form', 'confirmation'].map((step, index) => {
               const isActive = step === currentStep;
-              const isCompleted = 
+              const isCompleted =
                 (step === 'calendar' && (currentStep === 'form' || currentStep === 'confirmation')) ||
                 (step === 'form' && currentStep === 'confirmation');
-              
+
               return (
                 <React.Fragment key={step}>
-                  <div 
+                  <div
                     className={`
                       w-3 h-3 rounded-full transition-all duration-300 ease-out
-                      ${isActive ? 'bg-gray-500 scale-110' : 
+                      ${isActive ? 'bg-gray-500 scale-110' :
                         isCompleted ? 'bg-green-900' : 'bg-gray-300'
                       }
                     `}
                   />
                   {index < 2 && (
-                    <div 
+                    <div
                       className={`
                         h-0.5 w-8 transition-all duration-300 ease-out
                         ${isCompleted ? 'bg-green-900' : 'bg-gray-300'}
@@ -199,7 +205,7 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
 
         {/* Content with slide transitions */}
         <div className="p-6 overflow-y-auto max-h-[calc(95vh-200px)] relative">
-          <div 
+          <div
             className={`
               transition-all duration-200 ease-out transform
               ${isAnimating ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'}
@@ -208,7 +214,7 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
             {currentStep === 'calendar' && (
               <CalendarPicker onDateTimeSelect={handleDateTimeSelect} />
             )}
-            
+
             {currentStep === 'form' && (
               <SchedulingForm
                 onSubmit={handleFormSubmit}
@@ -218,7 +224,7 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
                 selectedTime={schedulingData.selectedTime}
               />
             )}
-            
+
             {currentStep === 'confirmation' && (
               <ConfirmationScreen
                 schedulingData={schedulingData}
@@ -243,3 +249,4 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
 };
 
 export default SchedulingModal;
+

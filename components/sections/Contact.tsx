@@ -12,7 +12,7 @@ const Contact: React.FC = () => {
             <p className="text-lg text-gray-600 leading-relaxed">
               Ready to transform your business with AI? Get in touch and let's discuss how we can help you achieve your goals.
             </p>
-            
+
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <div className="w-8 h-8 bg-gray-900 flex items-center justify-center">
@@ -28,7 +28,7 @@ const Contact: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="space-y-6">
             <div className="space-y-4">
               <input
@@ -58,3 +58,4 @@ const Contact: React.FC = () => {
 };
 
 export default Contact;
+
