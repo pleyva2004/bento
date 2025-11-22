@@ -1,4 +1,9 @@
+import { calendar_v3 } from 'googleapis';
+
+// ==========================================
 // Chat API Types
+// ==========================================
+
 export interface ChatRequest {
   message: string;
 }
@@ -11,7 +16,10 @@ export interface ChatErrorResponse {
   error: string;
 }
 
+// ==========================================
 // OpenAI API Types
+// ==========================================
+
 export interface OpenAIMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
@@ -41,7 +49,10 @@ export interface OpenAIResponse {
   object: string;
 }
 
+// ==========================================
 // Schedule Meeting API Types
+// ==========================================
+
 export interface ScheduleMeetingRequest {
   selectedDate: string;
   selectedTime: string;
@@ -60,7 +71,42 @@ export interface ScheduleMeetingErrorResponse {
   message: string;
 }
 
+// ==========================================
+// Google Calendar Types
+// ==========================================
+
+export type CalendarEvent = calendar_v3.Schema$Event;
+export type CalendarEventInsertParams = calendar_v3.Params$Resource$Events$Insert;
+
+export interface CalendarEventData {
+  summary: string;
+  description: string;
+  organizer: {
+    email: string;
+    displayName: string;
+  };
+  start: {
+    dateTime: string;
+    timeZone: string;
+  };
+  end: {
+    dateTime: string;
+    timeZone: string;
+  };
+  attendees: Array<{ email: string }>;
+  reminders: {
+    useDefault: boolean;
+    overrides: Array<{
+      method: string;
+      minutes: number;
+    }>;
+  };
+}
+
+// ==========================================
 // Email Helper Types
+// ==========================================
+
 export interface EmailParams {
   to: string;
   name: string;
@@ -78,7 +124,10 @@ export interface NotificationParams {
   meetingTime: string;
 }
 
+// ==========================================
 // Type Guards
+// ==========================================
+
 export function isChatRequest(body: any): body is ChatRequest {
   return body && typeof body.message === 'string';
 }

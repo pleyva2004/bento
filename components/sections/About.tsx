@@ -8,7 +8,7 @@ const About: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-light tracking-tight text-gray-900">
             About Neural Strategies
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="space-y-6">
               <p className="text-lg leading-relaxed text-gray-700">
@@ -18,7 +18,7 @@ const About: React.FC = () => {
                 Our approach combines deep technical expertise with strategic business insight to deliver AI solutions that drive real results.
               </p>
             </div>
-            
+
             <div className="space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
@@ -29,7 +29,7 @@ const About: React.FC = () => {
                   <div className="bg-gray-900 h-1 w-[95%]"></div>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium text-gray-900">AI Strategy</span>
@@ -39,7 +39,7 @@ const About: React.FC = () => {
                   <div className="bg-gray-900 h-1 w-[90%]"></div>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium text-gray-900">Implementation</span>
@@ -58,3 +58,4 @@ const About: React.FC = () => {
 };
 
 export default About;
+

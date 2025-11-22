@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 interface CalendarPickerProps {
@@ -37,12 +39,12 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
     const startingDayOfWeek = firstDay.getDay();
 
     const days = [];
-    
+
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
-    
+
     // Add all days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(currentYear, currentMonth, day);
@@ -50,7 +52,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
       const isAvailable = date >= today && date.getDay() !== 0 && date.getDay() !== 6;
       days.push({ day, date, isAvailable });
     }
-    
+
     return days;
   };
 
@@ -85,7 +87,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
         <h3 className="text-lg font-medium text-gray-900 mb-4">
           {currentMonth} {currentYear}
         </h3>
-        
+
         {/* Calendar Grid */}
         <div className="grid grid-cols-7 gap-1 text-center">
           {/* Day headers */}
@@ -94,7 +96,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
               {day}
             </div>
           ))}
-          
+
           {/* Calendar days */}
           {calendarDays.map((dayObj, index) => (
             <div key={index} className="p-1">
@@ -104,8 +106,8 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
                   disabled={!dayObj.isAvailable}
                   className={`
                     w-8 h-8 rounded-full text-sm font-medium transition-colors
-                    ${!dayObj.isAvailable 
-                      ? 'text-gray-300 cursor-not-allowed' 
+                    ${!dayObj.isAvailable
+                      ? 'text-gray-300 cursor-not-allowed'
                       : selectedDate?.getDate() === dayObj.day
                         ? 'bg-gray-900 text-white'
                         : 'text-gray-700 hover:bg-gray-100'
@@ -162,3 +164,4 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
 };
 
 export default CalendarPicker;
+

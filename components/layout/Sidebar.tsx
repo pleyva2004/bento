@@ -32,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, setCurrentSection }) 
               ${currentSection === item.id ? 'text-gray-900' : ''}
               ${index === 0 ? 'text-gray-900' : ''}
             `}
-            style={{ 
+            style={{
               letterSpacing: '0.1em'
             }}
           >
@@ -80,3 +80,4 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, setCurrentSection }) 
 };
 
 export default Sidebar;
+

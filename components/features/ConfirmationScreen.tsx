@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { SchedulingData } from './SchedulingModal';
 
@@ -28,7 +30,7 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
       { value: '16:00', display: '4:00 PM' },
       { value: '16:30', display: '4:30 PM' }
     ];
-    
+
     const timeSlot = timeSlots.find(slot => slot.value === time24);
     return timeSlot ? timeSlot.display : time24;
   };
@@ -57,7 +59,7 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
       {/* Meeting Details */}
       <div className="bg-gray-50 rounded-lg p-4 text-left space-y-3">
         <h4 className="font-medium text-gray-900 mb-3">Meeting Details</h4>
-        
+
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">Date & Time:</span>
@@ -70,22 +72,22 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
               })} at {formatTimeToDisplay(schedulingData.selectedTime)}
             </span>
           </div>
-          
+
           <div className="flex justify-between">
             <span className="text-gray-600">Name:</span>
             <span className="font-medium text-gray-900">{schedulingData.name}</span>
           </div>
-          
+
           <div className="flex justify-between">
             <span className="text-gray-600">Email:</span>
             <span className="font-medium text-gray-900">{schedulingData.email}</span>
           </div>
-          
+
           <div className="flex justify-between">
             <span className="text-gray-600">Company:</span>
             <span className="font-medium text-gray-900">{schedulingData.companyName}</span>
           </div>
-          
+
           <div className="flex justify-between">
             <span className="text-gray-600">Industry:</span>
             <span className="font-medium text-gray-900">{schedulingData.companyNiche}</span>
@@ -126,3 +128,4 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
 };
 
 export default ConfirmationScreen;
+

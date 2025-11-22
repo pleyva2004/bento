@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -55,7 +57,7 @@ const ChatInput: React.FC = () => {
       (document.body.style as any).webkitTouchCallout = 'none';
       (document.body.style as any).webkitTapHighlightColor = 'transparent';
       document.onselectstart = () => false;
-      
+
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleEnd);
       document.addEventListener('touchmove', handleTouchMove);
@@ -100,7 +102,7 @@ const ChatInput: React.FC = () => {
         isUser: true,
         timestamp: new Date()
       };
-      
+
       setMessages(prev => [...prev, userMessage]);
       setMessage('');
       setIsLoading(true);
@@ -114,7 +116,7 @@ const ChatInput: React.FC = () => {
           },
           body: JSON.stringify({ message: message.trim() }),
         });
-        
+
         const data = await response.json();
         const aiMessage: Message = {
           id: Date.now() + 1,
@@ -162,7 +164,7 @@ const ChatInput: React.FC = () => {
 
   return (
     <div className="fixed left-0 right-0 z-30 bottom-0">
-      <div 
+      <div
         className={`bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl overflow-hidden ${
           isDragging ? '' : 'transition-all duration-1000 ease-out'
         }`}
@@ -171,7 +173,7 @@ const ChatInput: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           {/* Drag Handle */}
           {isExpanded && (
-            <div 
+            <div
               className={`h-2 w-full cursor-ns-resize hover:bg-gray-300 hover:bg-opacity-50 transition-colors ${
                 isDragging ? 'bg-gray-300 bg-opacity-70' : ''
               }`}
@@ -189,9 +191,9 @@ const ChatInput: React.FC = () => {
           )}
           {/* Expanded Chat Area */}
           <div className={`transition-all duration-1000 ${
-            isExpanded 
-              ? isCollapsing 
-                ? 'opacity-0 transform translate-y-4' 
+            isExpanded
+              ? isCollapsing
+                ? 'opacity-0 transform translate-y-4'
                 : 'opacity-100 transform translate-y-0'
               : 'opacity-0 transform translate-y-4 h-0'
           }`} style={{ height: isExpanded ? `${customHeight - (window.innerWidth >= 768 ? 120 : 135)}px` : '0' }}>
@@ -247,7 +249,7 @@ const ChatInput: React.FC = () => {
                       </div>
                     </div>
                   ))}
-                  
+
                   {/* Loading Animation */}
                   {isLoading && (
                     <div className="flex justify-start">
@@ -263,6 +265,7 @@ const ChatInput: React.FC = () => {
                       </div>
                     </div>
                   )}
+                  <div ref={messagesEndRef} />
                 </>
               )}
             </div>
@@ -282,7 +285,7 @@ const ChatInput: React.FC = () => {
                   rows={1}
                   placeholder={isExpanded ? "Continue the conversation..." : "Ask about Levrok Labs..."}
                   className="w-full px-4 py-3 pr-12 bg-white bg-opacity-50 border border-gray-300 border-opacity-50 rounded-2xl text-gray-900 placeholder-gray-600 resize-none overflow-hidden
-                    focus:outline-none focus:border-gray-400 focus:border-opacity-70 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-20 
+                    focus:outline-none focus:border-gray-400 focus:border-opacity-70 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-20
                     hover:border-gray-400 hover:border-opacity-60 hover:bg-opacity-60
                     transition-all duration-300"
                   style={{ minHeight: '48px' }}
@@ -310,3 +313,4 @@ const ChatInput: React.FC = () => {
 };
 
 export default ChatInput;
+
