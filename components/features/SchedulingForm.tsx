@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { formatTimeWithTimezone } from '@/lib/timezone-utils';
 
 interface SchedulingFormProps {
   onSubmit: (data: {
@@ -13,6 +14,7 @@ interface SchedulingFormProps {
   isSubmitting: boolean;
   selectedDate: Date | null;
   selectedTime: string;
+  timezone: string;
 }
 
 const SchedulingForm: React.FC<SchedulingFormProps> = ({
@@ -20,7 +22,8 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   onBack,
   isSubmitting,
   selectedDate,
-  selectedTime
+  selectedTime,
+  timezone
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -125,7 +128,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
             year: 'numeric',
             month: 'long',
             day: 'numeric'
-          })} at {formatTimeToDisplay(selectedTime)}
+          })} at {formatTimeWithTimezone(selectedTime, timezone)}
         </p>
         <button
           type="button"

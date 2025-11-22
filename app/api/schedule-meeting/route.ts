@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createCalendarEvent } from '@/lib/google-calendar';
+import { createCalBooking } from '@/lib/cal-api';
 import { isScheduleMeetingRequest } from '@/lib/types';
 import type { ScheduleMeetingResponse, ScheduleMeetingErrorResponse } from '@/lib/types';
 
@@ -15,8 +15,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(errorResponse, { status: 400 });
     }
 
-    // Create calendar event
-    const meetingId = await createCalendarEvent(body);
+    // Create calendar event via Cal.com
+    const meetingId = await createCalBooking(body);
 
     const response: ScheduleMeetingResponse = {
       message: 'Meeting scheduled successfully',
