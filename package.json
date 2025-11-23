@@ -10,9 +10,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@calcom/embed-react": "^1.5.3",
     "@google-apps/meet": "^0.7.0",
     "@google-cloud/local-auth": "^2.1.1",
+    "fs": "^0.0.1-security",
     "googleapis": "^105.0.0",
+    "gray-matter": "^4.0.3",
     "next": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -13,6 +13,7 @@ interface SchedulingModalProps {
 export interface SchedulingData {
   selectedDate: Date | null;
   selectedTime: string;
+  timezone: string;
   name: string;
   email: string;
   companyName: string;
@@ -27,6 +28,7 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
   const [schedulingData, setSchedulingData] = useState<SchedulingData>({
     selectedDate: null,
     selectedTime: '',
+    timezone: 'America/New_York',
     name: '',
     email: '',
     companyName: '',
@@ -46,8 +48,8 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
     }
   }, [isOpen]);
 
-  const handleDateTimeSelect = (date: Date, time: string) => {
-    setSchedulingData(prev => ({ ...prev, selectedDate: date, selectedTime: time }));
+  const handleDateTimeSelect = (date: Date, time: string, timezone: string) => {
+    setSchedulingData(prev => ({ ...prev, selectedDate: date, selectedTime: time, timezone: timezone }));
 
     // Add smooth transition between steps
     setIsAnimating(true);
@@ -57,12 +59,13 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
     }, 150);
   };
 
-  const handleFormSubmit = async (formData: Omit<SchedulingData, 'selectedDate' | 'selectedTime'>) => {
+  const handleFormSubmit = async (formData: Omit<SchedulingData, 'selectedDate' | 'selectedTime' | 'timezone'>) => {
     setIsSubmitting(true);
 
     const completeData = {
       selectedDate: schedulingData.selectedDate?.toISOString().split('T')[0] || '',
       selectedTime: schedulingData.selectedTime,
+      timezone: schedulingData.timezone,
       name: formData.name,
       email: formData.email,
       companyName: formData.companyName,
@@ -103,6 +106,7 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
     setSchedulingData({
       selectedDate: null,
       selectedTime: '',
+      timezone: '',
       name: '',
       email: '',
       companyName: '',
@@ -222,6 +226,7 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
                 isSubmitting={isSubmitting}
                 selectedDate={schedulingData.selectedDate}
                 selectedTime={schedulingData.selectedTime}
+                timezone={schedulingData.timezone}
               />
             )}
 

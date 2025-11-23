@@ -4,7 +4,7 @@ const Hero: React.FC = () => {
   return (
     <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-[10px] sm:pt-[124px] md:pt-[140px]">
       {/* Top Centered Text */}
-      <div className="absolute top-[100px] sm:top-[110px] md:top-[130px] left-0 right-0 text-center z-10">
+      <div className="absolute top-4 sm:top-[110px] md:top-[130px] left-0 right-0 text-center z-10 flex items-center justify-center h-10 sm:h-auto">
         <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 font-light tracking-widest uppercase text-balance">
           [ LEVROK Labs - Intelligent Data Systems ]
         </p>
@@ -14,22 +14,24 @@ const Hero: React.FC = () => {
         <div className="relative z-10 max-w-4xl">
 
           {/* Main Heading */}
-          <div className="space-y-0">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-6xl font-bold leading-none tracking-tight space-y-1 md:space-y-1.5 lg:space-y-2">
-              <div className="text-gray-900">WE BUILD</div>
-              <div>
-                <span className="text-gray-500">[</span>
-                <span className="text-gray-900">INTELLIGENCE</span>
-                <span className="text-gray-500">]</span>
-              </div>
-              <div className="text-gray-700">FOR GROWING</div>
-              <div className="text-gray-400">ORGANIZATIONS</div>
-            </h2>
+          <div className="backdrop-blur-[1px] bg-white/5 rounded-3xl p-6">
+            <div className="space-y-0">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-6xl font-bold leading-none tracking-tight space-y-1 md:space-y-1.5 lg:space-y-2">
+                <div className="text-gray-900">WE BUILD</div>
+                <div>
+                  <span className="text-gray-500">[</span>
+                  <span className="text-gray-900">INTELLIGENCE</span>
+                  <span className="text-gray-500">]</span>
+                </div>
+                <div className="text-gray-700">FOR GROWING</div>
+                <div className="text-gray-400">ORGANIZATIONS</div>
+              </h2>
+            </div>
           </div>
         </div>
 
         {/* Subheading */}
-        <div className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-xl text-gray-600 font-light tracking-wide mt-6">
+        <div className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-xl text-gray-600 font-light tracking-wide mt-6 backdrop-blur-[1px] bg-white/5 rounded-3xl p-6">
           Using intelligence to scale and improve decision-making
         </div>
 
@@ -77,7 +79,7 @@ const Hero: React.FC = () => {
 
           {/* Secondary Button - Explore Insights */}
           <a
-            href="/blog"
+            href="/insights"
             className="group text-gray-700 font-light text-sm sm:text-base md:text-base inline-flex items-center justify-center hover:text-gray-900 transition-all duration-300 uppercase tracking-wide py-3.5 sm:py-4 md:py-4"
           >
             EXPLORE INSIGHTS

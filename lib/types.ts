@@ -56,6 +56,7 @@ export interface OpenAIResponse {
 export interface ScheduleMeetingRequest {
   selectedDate: string;
   selectedTime: string;
+  timezone: string;
   name: string;
   email: string;
   companyName: string;
@@ -137,6 +138,7 @@ export function isScheduleMeetingRequest(body: any): body is ScheduleMeetingRequ
     body &&
     typeof body.selectedDate === 'string' &&
     typeof body.selectedTime === 'string' &&
+    typeof body.timezone === 'string' &&
     typeof body.name === 'string' &&
     typeof body.email === 'string' &&
     typeof body.companyName === 'string' &&

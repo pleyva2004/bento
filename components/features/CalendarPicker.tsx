@@ -1,32 +1,46 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {
+  detectUserTimezone,
+  getBestMatchingTimezone,
+  generateTimeSlotsForTimezone,
+  US_TIMEZONES,
+  getCurrentTimeInTimezone,
+} from '@/lib/timezone-utils';
 
 interface CalendarPickerProps {
-  onDateTimeSelect: (date: Date, time: string) => void;
+  onDateTimeSelect: (date: Date, time: string, timezone: string) => void;
 }
 
 const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>('');
+  const [selectedTimezone, setSelectedTimezone] = useState<string>('America/New_York');
+  const [currentTime, setCurrentTime] = useState<string>('');
 
-  // Generate available time slots (9 AM to 5 PM, excluding weekends)
-  const timeSlots = [
-    { value: '09:00', display: '9:00 AM' },
-    { value: '09:30', display: '9:30 AM' },
-    { value: '10:00', display: '10:00 AM' },
-    { value: '10:30', display: '10:30 AM' },
-    { value: '11:00', display: '11:00 AM' },
-    { value: '11:30', display: '11:30 AM' },
-    { value: '13:00', display: '1:00 PM' },
-    { value: '13:30', display: '1:30 PM' },
-    { value: '14:00', display: '2:00 PM' },
-    { value: '14:30', display: '2:30 PM' },
-    { value: '15:00', display: '3:00 PM' },
-    { value: '15:30', display: '3:30 PM' },
-    { value: '16:00', display: '4:00 PM' },
-    { value: '16:30', display: '4:30 PM' }
-  ];
+  // Auto-detect timezone on mount
+  useEffect(() => {
+    const detectedTz = detectUserTimezone();
+    const matchingTz = getBestMatchingTimezone(detectedTz);
+    setSelectedTimezone(matchingTz);
+  }, []);
+
+  // Update current time display every minute
+  useEffect(() => {
+    const updateCurrentTime = () => {
+      setCurrentTime(getCurrentTimeInTimezone(selectedTimezone));
+    };
+
+    updateCurrentTime();
+    const interval = setInterval(updateCurrentTime, 60000); // Update every minute
+
+    return () => clearInterval(interval);
+  }, [selectedTimezone]);
+
+  // Generate time slots based on selected timezone
+  // Base availability: 11 AM - 7 PM EST
+  const timeSlots = generateTimeSlotsForTimezone(selectedTimezone);
 
   // Generate calendar days for current month
   const generateCalendarDays = () => {
@@ -70,18 +84,56 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
     setSelectedTime(''); // Reset time selection when date changes
   };
 
+  const handleTimezoneChange = (timezone: string) => {
+    setSelectedTimezone(timezone);
+    setSelectedTime(''); // Reset time selection when timezone changes
+  };
+
   const handleTimeSelect = (timeValue: string) => {
     setSelectedTime(timeValue);
   };
 
   const handleContinue = () => {
     if (selectedDate && selectedTime) {
-      onDateTimeSelect(selectedDate, selectedTime);
+      onDateTimeSelect(selectedDate, selectedTime, selectedTimezone);
     }
   };
 
+  // const timezoneInfo = getTimezoneInfo(selectedTimezone);
+
   return (
     <div className="space-y-6">
+      {/* Timezone Selector */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <label htmlFor="timezone" className="block text-sm font-medium text-gray-900 mb-2">
+              Your Timezone
+            </label>
+            <select
+              id="timezone"
+              value={selectedTimezone}
+              onChange={(e) => handleTimezoneChange(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+            >
+              {US_TIMEZONES.map((tz) => (
+                <option key={tz.value} value={tz.value}>
+                  {tz.label} ({tz.abbreviation})
+                </option>
+              ))}
+            </select>
+            {currentTime && (
+              <p className="text-xs text-gray-600 mt-2">
+                Current time: {currentTime}
+              </p>
+            )}
+          </div>
+        </div>
+        <p className="text-xs text-gray-600 mt-3">
+          Available hours: 11:00 AM - 7:00 PM EST (converted to your timezone)
+        </p>
+      </div>
+
       {/* Calendar */}
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">
