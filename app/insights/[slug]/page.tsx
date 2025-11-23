@@ -20,10 +20,10 @@ export default function InsightPostPage({ params }: { params: { slug: string } }
 
     return (
         <InsightsLayout>
-            <main className="min-h-screen relative overflow-hidden pt-[10px] sm:pt-[124px] md:pt-[140px]">
-                <div className="max-w-7xl w-full mx-auto px-8 md:pl-24 lg:pl-32 lg:pr-16">
+            <main className="min-h-screen relative overflow-hidden pt-[10px] sm:pt-[124px] md:pt-[140px] ">
+                <div className="max-w-7xl w-full mx-auto px-8 md:pl-24 lg:pl-32 lg:pr-16 pb-20 ">
                     {/* Navigation */}
-                    <div className="mb-8">
+                    <div className="mb-8 max-w-4xl mx-auto">
                         <Link
                             href="/insights"
                             className="text-sm text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center gap-2"
@@ -33,9 +33,9 @@ export default function InsightPostPage({ params }: { params: { slug: string } }
                     </div>
 
                     {/* Article */}
-                    <article className="max-w-4xl">
+                    <article className="max-w-4xl mx-auto">
                         {/* Header */}
-                        <div className="mb-12 backdrop-blur-[1px] bg-white/5 rounded-3xl p-6">
+                        <div className="mb-4 bg-white text-gray-900 border border-gray-300 rounded-2xl px-4 py-2">
                             <p className="text-xs sm:text-sm text-gray-500 mb-4">
                                 {new Date(post.date).toLocaleDateString('en-US', {
                                     year: 'numeric',
@@ -48,11 +48,11 @@ export default function InsightPostPage({ params }: { params: { slug: string } }
                         </div>
 
                         {/* Content */}
-                        <div className="backdrop-blur-[1px] bg-white/5 rounded-3xl p-6 prose prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded">
+                        <div className="bg-white text-gray-900 border border-gray-300 rounded-2xl px-4 py-2 prose prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded">
                             <ReactMarkdown>{post.content}</ReactMarkdown>
                         </div>
 
-                        {/* Footer */}
+                        {/* Footer
                         <div className="mt-8 pt-8 border-t border-gray-200">
                             <Link
                                 href="/insights"
@@ -60,7 +60,7 @@ export default function InsightPostPage({ params }: { params: { slug: string } }
                             >
                                 <span>←</span> Back to all insights
                             </Link>
-                        </div>
+                        </div> */}
                     </article>
                 </div>
             </main>

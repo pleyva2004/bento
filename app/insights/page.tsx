@@ -31,7 +31,7 @@ export default function InsightsPage({
                     </p>
                 </div>
 
-                <div className="relative max-w-7xl w-full px-8 md:pl-24 lg:pl-32 lg:pr-16 -mt-20">
+                <div className="relative max-w-7xl w-full mx-auto px-8 md:pl-24 lg:pl-32 lg:pr-16 -mt-20 pb-20">
                     {/* Main Content */}
                     <div className="relative z-10 max-w-4xl">
                         {/* Main Heading */}
@@ -59,34 +59,40 @@ export default function InsightsPage({
                         </nav>
 
                         {/* Insight Posts */}
-                        <div className="space-y-8 backdrop-blur-[1px] bg-white/5 rounded-3xl p-6">
+                        <div className="space-y-4">
                             {insights.length === 0 ? (
-                                <p className="text-gray-500 text-center py-12">No posts found in this category.</p>
+                                <div className="bg-white text-gray-900 border border-gray-300 rounded-2xl px-4 py-2">
+                                    <p className="text-gray-500 text-center py-12">No posts found in this category.</p>
+                                </div>
                             ) : (
                                 insights.map((post) => (
                                     <Link
                                         key={post.slug}
                                         href={`/insights/${post.slug}`}
-                                        className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 md:gap-8 group hover:opacity-80 transition-opacity pb-8 border-b border-gray-200 last:border-b-0 last:pb-0"
+                                        className="block group"
                                     >
-                                        {/* Left Column - Metadata */}
-                                        <div className="text-gray-600 text-xs sm:text-sm space-y-1">
-                                            <p>{new Date(post.date).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric'
-                                            })}</p>
-                                            <p>{post.author}</p>
-                                        </div>
+                                        <div className="bg-white text-gray-900 border border-gray-300 rounded-2xl px-4 py-2 hover:border-gray-400 transition-colors">
+                                            <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 md:gap-8 pb-4">
+                                                {/* Left Column - Metadata */}
+                                                <div className="text-gray-600 text-xs sm:text-sm space-y-1">
+                                                    <p>{new Date(post.date).toLocaleDateString('en-US', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric'
+                                                    })}</p>
+                                                    <p>{post.author}</p>
+                                                </div>
 
-                                        {/* Right Column - Content */}
-                                        <div>
-                                            <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold mb-3 group-hover:underline">
-                                                {post.title}
-                                            </h2>
-                                            <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                                                {post.description}
-                                            </p>
+                                                {/* Right Column - Content */}
+                                                <div>
+                                                    <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold mb-3 group-hover:underline">
+                                                        {post.title}
+                                                    </h2>
+                                                    <p className="text-sm md:text-base text-gray-700 leading-relaxed">
+                                                        {post.description}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </Link>
                                 ))
