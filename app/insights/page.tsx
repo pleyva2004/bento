@@ -31,9 +31,9 @@ export default function InsightsPage({
                     </p>
                 </div>
 
-                <div className="relative max-w-7xl w-full mx-auto px-8 md:pl-24 lg:pl-32 lg:pr-16 -mt-20 pb-20">
+                <div className="relative max-w-7xl xl:max-w-[1400px] 2xl:max-w-[1600px] w-full mx-auto px-8 md:pl-24 lg:pl-32 xl:pl-20 2xl:pl-16 -mt-20 pb-20">
                     {/* Main Content */}
-                    <div className="relative z-10 max-w-4xl mx-auto">
+                    <div className="relative z-10 max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[1200px] mx-auto">
                         {/* Main Heading */}
                         <div className="backdrop-blur-[1px] bg-white/5 rounded-3xl p-6 mb-8 text-center md:text-left">
                             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-6xl font-bold leading-none tracking-tight">
