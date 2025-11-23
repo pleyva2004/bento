@@ -2,19 +2,20 @@ import React from 'react';
 
 const Hero: React.FC = () => {
   return (
-    <main className="min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-[10px] sm:pt-[124px] md:pt-[140px]">
+    <main className="min-h-[90vh] flex items-start sm:items-center justify-center relative overflow-hidden pt-[180px] sm:pt-[124px] md:pt-[140px]">
       {/* Top Centered Text */}
       <div className="absolute top-4 sm:top-[110px] md:top-[130px] left-0 right-0 text-center z-10 flex items-center justify-center h-10 sm:h-auto">
-        <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 font-light tracking-widest uppercase text-balance">
+        <p className="text-[10px] sm:text-sm md:text-base lg:text-lg text-gray-600 font-light tracking-widest uppercase text-balance">
           [ LEVROK Labs - Intelligent Data Systems ]
         </p>
       </div>
 
-      <div className="relative max-w-7xl w-full px-8 md:pl-24 lg:pl-32 lg:pr-16 -mt-20">        {/* Main Content */}
+      {/* Main Content */}
+      <div className="relative max-w-7xl w-full px-8 md:pl-24 lg:pl-32 lg:pr-16 -mt-20">
         <div className="relative z-10 max-w-4xl">
 
           {/* Main Heading */}
-          <div className="backdrop-blur-[1px] bg-white/5 rounded-3xl p-6">
+          <div className="backdrop-blur-[1px] bg-white/5 rounded-3xl pt-[10px] px-6 pb-0 sm:pb-6">
             <div className="space-y-0">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-6xl font-bold leading-none tracking-tight space-y-1 md:space-y-1.5 lg:space-y-2">
                 <div className="text-gray-900">WE BUILD</div>
@@ -31,7 +32,7 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Subheading */}
-        <div className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-xl text-gray-600 font-light tracking-wide mt-6 backdrop-blur-[1px] bg-white/5 rounded-3xl p-6">
+        <div className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-xl text-gray-600 font-light tracking-wide mt-0 sm:mt-6 backdrop-blur-[1px] bg-white/5 rounded-3xl p-6">
           Using intelligence to scale and improve decision-making
         </div>
 

@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, setCurrentSection }) 
     </div>
 
       {/* Mobile Hamburger Menu - Shown only on mobile */}
-      <div className="md:hidden fixed top-4 right-4 z-50">
+      <div className="md:hidden absolute top-4 right-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="w-10 h-10 bg-white rounded-md shadow-lg flex flex-col justify-center items-center space-y-1"
