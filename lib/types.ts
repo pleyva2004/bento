@@ -73,6 +73,26 @@ export interface ScheduleMeetingErrorResponse {
 }
 
 // ==========================================
+// Availability Check Types
+// ==========================================
+
+export interface CheckAvailabilityRequest {
+  date: string;      // YYYY-MM-DD format
+  timezone: string;  // IANA timezone
+}
+
+export interface CheckAvailabilityResponse {
+  availableSlots: string[];  // Array of HH:MM times
+  date: string;
+  timezone: string;
+}
+
+export interface CheckAvailabilityError {
+  error: string;
+  message: string;
+}
+
+// ==========================================
 // Google Calendar Types
 // ==========================================
 

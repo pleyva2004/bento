@@ -18,6 +18,9 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [selectedTimezone, setSelectedTimezone] = useState<string>('America/New_York');
   const [currentTime, setCurrentTime] = useState<string>('');
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [isLoadingAvailability, setIsLoadingAvailability] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState<string | null>(null);
 
   // Auto-detect timezone on mount
   useEffect(() => {
@@ -79,14 +82,81 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
   const currentMonth = monthNames[today.getMonth()];
   const currentYear = today.getFullYear();
 
-  const handleDateSelect = (date: Date) => {
+  const handleDateSelect = async (date: Date) => {
     setSelectedDate(date);
     setSelectedTime(''); // Reset time selection when date changes
+    setAvailableSlots([]);
+    setAvailabilityError(null);
+    setIsLoadingAvailability(true);
+
+    try {
+      // Format date as YYYY-MM-DD
+      const dateString = date.toISOString().split('T')[0];
+
+      const response = await fetch('/api/check-availability', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          date: dateString,
+          timezone: selectedTimezone,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to check availability');
+      }
+
+      const data = await response.json();
+      setAvailableSlots(data.availableSlots || []);
+    } catch (error) {
+      console.error('Error fetching availability:', error);
+      setAvailabilityError('Failed to load available times. Please try again.');
+      setAvailableSlots([]);
+    } finally {
+      setIsLoadingAvailability(false);
+    }
   };
 
-  const handleTimezoneChange = (timezone: string) => {
+  const handleTimezoneChange = async (timezone: string) => {
     setSelectedTimezone(timezone);
     setSelectedTime(''); // Reset time selection when timezone changes
+
+    // Refetch availability if a date is already selected
+    if (selectedDate) {
+      setAvailableSlots([]);
+      setAvailabilityError(null);
+      setIsLoadingAvailability(true);
+
+      try {
+        const dateString = selectedDate.toISOString().split('T')[0];
+
+        const response = await fetch('/api/check-availability', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            date: dateString,
+            timezone: timezone,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to check availability');
+        }
+
+        const data = await response.json();
+        setAvailableSlots(data.availableSlots || []);
+      } catch (error) {
+        console.error('Error fetching availability:', error);
+        setAvailabilityError('Failed to load available times. Please try again.');
+        setAvailableSlots([]);
+      } finally {
+        setIsLoadingAvailability(false);
+      }
+    }
   };
 
   const handleTimeSelect = (timeValue: string) => {
@@ -180,23 +250,53 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
           <h3 className="text-lg font-medium text-gray-900 mb-4">
             Available Times for {selectedDate.toLocaleDateString()}
           </h3>
-          <div className="grid grid-cols-3 gap-2">
-            {timeSlots.map(timeSlot => (
-              <button
-                key={timeSlot.value}
-                onClick={() => handleTimeSelect(timeSlot.value)}
-                className={`
-                  p-3 rounded-lg text-sm font-medium transition-colors
-                  ${selectedTime === timeSlot.value
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                  }
-                `}
-              >
-                {timeSlot.display}
-              </button>
-            ))}
-          </div>
+
+          {/* Loading State */}
+          {isLoadingAvailability && (
+            <div className="flex items-center justify-center py-8">
+              <div className="flex items-center space-x-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+                <span className="text-gray-600">Checking availability...</span>
+              </div>
+            </div>
+          )}
+
+          {/* Error State */}
+          {!isLoadingAvailability && availabilityError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+              {availabilityError}
+            </div>
+          )}
+
+          {/* No Availability */}
+          {!isLoadingAvailability && !availabilityError && availableSlots.length === 0 && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
+              No available time slots for this date. Please select another date or check your Cal.com availability settings.
+            </div>
+          )}
+
+          {/* Available Time Slots */}
+          {!isLoadingAvailability && !availabilityError && availableSlots.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {timeSlots
+                .filter(timeSlot => availableSlots.includes(timeSlot.value))
+                .map(timeSlot => (
+                  <button
+                    key={timeSlot.value}
+                    onClick={() => handleTimeSelect(timeSlot.value)}
+                    className={`
+                      p-3 rounded-lg text-sm font-medium transition-colors
+                      ${selectedTime === timeSlot.value
+                        ? 'bg-gray-900 text-white'
+                        : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                      }
+                    `}
+                  >
+                    {timeSlot.display}
+                  </button>
+                ))}
+            </div>
+          )}
         </div>
       )}
 
