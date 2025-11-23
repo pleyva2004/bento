@@ -106,6 +106,7 @@ const SchedulingModal: React.FC<SchedulingModalProps> = ({ isOpen, onClose }) =>
     setSchedulingData({
       selectedDate: null,
       selectedTime: '',
+      timezone: '',
       name: '',
       email: '',
       companyName: '',

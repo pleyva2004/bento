@@ -76,27 +76,27 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   };
 
   // Function to convert 24-hour time to 12-hour format
-  const formatTimeToDisplay = (time24: string) => {
-    const timeSlots = [
-      { value: '09:00', display: '9:00 AM' },
-      { value: '09:30', display: '9:30 AM' },
-      { value: '10:00', display: '10:00 AM' },
-      { value: '10:30', display: '10:30 AM' },
-      { value: '11:00', display: '11:00 AM' },
-      { value: '11:30', display: '11:30 AM' },
-      { value: '13:00', display: '1:00 PM' },
-      { value: '13:30', display: '1:30 PM' },
-      { value: '14:00', display: '2:00 PM' },
-      { value: '14:30', display: '2:30 PM' },
-      { value: '15:00', display: '3:00 PM' },
-      { value: '15:30', display: '3:30 PM' },
-      { value: '16:00', display: '4:00 PM' },
-      { value: '16:30', display: '4:30 PM' }
-    ];
+  // const formatTimeToDisplay = (time24: string) => {
+  //   const timeSlots = [
+  //     { value: '09:00', display: '9:00 AM' },
+  //     { value: '09:30', display: '9:30 AM' },
+  //     { value: '10:00', display: '10:00 AM' },
+  //     { value: '10:30', display: '10:30 AM' },
+  //     { value: '11:00', display: '11:00 AM' },
+  //     { value: '11:30', display: '11:30 AM' },
+  //     { value: '13:00', display: '1:00 PM' },
+  //     { value: '13:30', display: '1:30 PM' },
+  //     { value: '14:00', display: '2:00 PM' },
+  //     { value: '14:30', display: '2:30 PM' },
+  //     { value: '15:00', display: '3:00 PM' },
+  //     { value: '15:30', display: '3:30 PM' },
+  //     { value: '16:00', display: '4:00 PM' },
+  //     { value: '16:30', display: '4:30 PM' }
+  //   ];
 
-    const timeSlot = timeSlots.find(slot => slot.value === time24);
-    return timeSlot ? timeSlot.display : time24;
-  };
+  //   const timeSlot = timeSlots.find(slot => slot.value === time24);
+  //   return timeSlot ? timeSlot.display : time24;
+  // };
 
   const companyNiches = [
     'Technology/Software',

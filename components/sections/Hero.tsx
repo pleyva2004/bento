@@ -79,7 +79,7 @@ const Hero: React.FC = () => {
 
           {/* Secondary Button - Explore Insights */}
           <a
-            href="/blog"
+            href="/insights"
             className="group text-gray-700 font-light text-sm sm:text-base md:text-base inline-flex items-center justify-center hover:text-gray-900 transition-all duration-300 uppercase tracking-wide py-3.5 sm:py-4 md:py-4"
           >
             EXPLORE INSIGHTS

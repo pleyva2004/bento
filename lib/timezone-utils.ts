@@ -167,7 +167,7 @@ export function getCurrentTimeInTimezone(timezoneValue: string): string {
 export function convertTimeBetweenTimezones(
   date: string,
   time: string,
-  fromTimezone: string,
+  _fromTimezone: string,
   toTimezone: string
 ): { date: string; time: string } {
   const [year, month, day] = date.split('-').map(Number);

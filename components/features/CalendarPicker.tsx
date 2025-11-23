@@ -7,7 +7,6 @@ import {
   generateTimeSlotsForTimezone,
   US_TIMEZONES,
   getCurrentTimeInTimezone,
-  getTimezoneInfo,
 } from '@/lib/timezone-utils';
 
 interface CalendarPickerProps {
@@ -100,7 +99,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ onDateTimeSelect }) => 
     }
   };
 
-  const timezoneInfo = getTimezoneInfo(selectedTimezone);
+  // const timezoneInfo = getTimezoneInfo(selectedTimezone);
 
   return (
     <div className="space-y-6">
