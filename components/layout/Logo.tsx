@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Logo: React.FC = () => {
   return (
-    <Link href="/" className="fixed top-4 sm:top-6 md:top-8 left-4 sm:left-6 md:left-8 z-50 cursor-pointer hover:opacity-80 transition-opacity">
+    <Link href="/" className="absolute md:fixed top-4 sm:top-6 md:top-8 left-4 sm:left-6 md:left-8 z-50 cursor-pointer hover:opacity-80 transition-opacity">
       <div className="relative">
         {/* Background dark square */}
         <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gray-600 border border-gray-600 transform rotate-90"></div>

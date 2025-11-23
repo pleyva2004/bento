@@ -20,7 +20,7 @@ export default function InsightPostPage({ params }: { params: { slug: string } }
 
     return (
         <InsightsLayout>
-            <main className="min-h-screen relative overflow-hidden pt-[10px] sm:pt-[124px] md:pt-[140px] ">
+            <main className="min-h-screen relative overflow-hidden pt-20 sm:pt-[124px] md:pt-[140px]">
                 <div className="max-w-7xl w-full mx-auto px-8 md:pl-24 lg:pl-32 lg:pr-16 pb-20 ">
                     {/* Navigation */}
                     <div className="mb-8 max-w-4xl mx-auto">
