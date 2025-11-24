@@ -40,7 +40,7 @@ const Hero: React.FC = () => {
         <div className="flex flex-wrap items-center gap-4 sm:gap-5 md:gap-6 mt-8 sm:mt-10 md:mt-12">
           {/* Primary Button - Get Started with Levrok */}
           <a
-            href="/levrok"
+            href="/getstarted"
             className="group relative px-6 py-3.5 sm:px-7 sm:py-4 md:px-8 md:py-4 bg-gray-100 text-gray-900 font-medium text-sm sm:text-base md:text-base inline-flex items-center justify-center hover:bg-gray-200 transition-all duration-300 border border-gray-300 uppercase tracking-wide overflow-hidden"
             style={{ clipPath: 'polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px)' }}
           >
