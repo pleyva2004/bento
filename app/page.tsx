@@ -10,7 +10,7 @@ import ParticleAnimation from '@/components/ParticleAnimation';
 // import TryOurAI from '@/components/features/TryOurAI';
 
 export default function Home() {
-    const [currentSection, setCurrentSection] = useState<string>('home');
+    const [currentSection, setCurrentSection] = useState<string>('about');
 
     return (
         <div className="bg-white text-gray-900 min-h-screen pb-20 relative">
