@@ -13,10 +13,10 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, setCurrentSection }) 
 
   const navItems = [
     { id: 'home', label: 'Home', link: '/' },
-    { id: 'verticals', label: 'Verticals', link: null },
+    // { id: 'verticals', label: 'Verticals', link: null },
     { id: 'insights', label: 'Insights', link: '/insights' },
-    { id: 'careers', label: 'Careers', link: null },
-    { id: 'contact', label: 'Contact', link: null }
+    // { id: 'careers', label: 'Careers', link: null },
+    // { id: 'contact', label: 'Contact', link: null }
   ];
 
   return (

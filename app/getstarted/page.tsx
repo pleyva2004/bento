@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Logo from '@/components/layout/Logo';
 import ParticleAnimation from '@/components/ParticleAnimation';
 import Sidebar from '@/components/layout/Sidebar';
+import BookCallButton from '@/components/features/BookCallButton';
 
 export default function GetStarted() {
     const [currentSection, setCurrentSection] = useState<string>('');
@@ -23,10 +24,11 @@ export default function GetStarted() {
                         <p className="text-xl text-gray-600 mb-8">
                             Ready to transform your organization with intelligent data systems?
                         </p>
-                        <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100">
-                            <p className="text-gray-600">
-                                Contact form or onboarding flow will go here.
+                        <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100 space-y-6">
+                            <p className="text-gray-700 text-lg font-medium">
+                                Book a time for a discovery call and a product demo.
                             </p>
+                            <BookCallButton />
                         </div>
                     </div>
                 </div>
