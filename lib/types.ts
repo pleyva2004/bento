@@ -4,8 +4,14 @@ import { calendar_v3 } from 'googleapis';
 // Chat API Types
 // ==========================================
 
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 export interface ChatRequest {
-  message: string;
+  message?: string; // Legacy single message support
+  messages?: ChatMessage[]; // New conversation history support
 }
 
 export interface ChatResponse {
@@ -150,7 +156,7 @@ export interface NotificationParams {
 // ==========================================
 
 export function isChatRequest(body: any): body is ChatRequest {
-  return body && typeof body.message === 'string';
+  return body && (typeof body.message === 'string' || Array.isArray(body.messages));
 }
 
 export function isScheduleMeetingRequest(body: any): body is ScheduleMeetingRequest {

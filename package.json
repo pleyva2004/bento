@@ -15,6 +15,7 @@
     "@google-cloud/local-auth": "^2.1.1",
     "fs": "^0.0.1-security",
     "googleapis": "^105.0.0",
+    "gpt-tokenizer": "^3.4.0",
     "gray-matter": "^4.0.3",
     "next": "^14.0.0",
     "react": "^18.2.0",

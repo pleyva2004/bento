@@ -1,4 +1,4 @@
-import type { OpenAIRequest, OpenAIResponse } from './types';
+import type { OpenAIRequest, OpenAIResponse, ChatMessage, OpenAIMessage } from './types';
 
 const SYSTEM_PROMPT = `You are an AI assistant for Levrok Labs, an AI consulting company specializing in helping family-owned businesses implement AI solutions.
 
@@ -14,23 +14,40 @@ Do not be redundant, do not repeat the same information. Only say information on
 Format: If it is a simple and quick answer, write the response as a Markdown bullet list, with each item on a new line. Ensure that the bullet points are indented.
 If it is a long answer, write 2-3 sentences, and bullet points if more information is needed. Use minimal Markdown. Only for headers and bullet points and italics if needed.`;
 
-export async function getChatResponse(message: string): Promise<string> {
+// Helper to build message array with system prompt and history
+function buildMessages(messageOrHistory: string | ChatMessage[]): OpenAIMessage[] {
+  const messages: OpenAIMessage[] = [
+    {
+      role: 'system',
+      content: SYSTEM_PROMPT,
+    },
+  ];
+
+  if (typeof messageOrHistory === 'string') {
+    // Single message (legacy)
+    messages.push({
+      role: 'user',
+      content: messageOrHistory,
+    });
+  } else {
+    // Conversation history
+    messages.push(...messageOrHistory.map(msg => ({
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content,
+    })));
+  }
+
+  return messages;
+}
+
+export async function getChatResponse(messageOrHistory: string | ChatMessage[]): Promise<string> {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OPENAI_API_KEY environment variable is not set');
   }
 
   const openAIRequest: OpenAIRequest = {
     model: 'gpt-3.5-turbo',
-    messages: [
-      {
-        role: 'system',
-        content: SYSTEM_PROMPT,
-      },
-      {
-        role: 'user',
-        content: message,
-      },
-    ],
+    messages: buildMessages(messageOrHistory),
     max_tokens: 300,
     temperature: 0.7,
   };
@@ -59,23 +76,14 @@ export async function getChatResponse(message: string): Promise<string> {
 }
 
 // Streaming version using Server-Sent Events
-export async function getChatResponseStream(message: string): Promise<ReadableStream> {
+export async function getChatResponseStream(messageOrHistory: string | ChatMessage[]): Promise<ReadableStream> {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OPENAI_API_KEY environment variable is not set');
   }
 
   const openAIRequest = {
     model: 'gpt-3.5-turbo',
-    messages: [
-      {
-        role: 'system',
-        content: SYSTEM_PROMPT,
-      },
-      {
-        role: 'user',
-        content: message,
-      },
-    ],
+    messages: buildMessages(messageOrHistory),
     max_tokens: 300,
     temperature: 0.7,
     stream: true, // Enable streaming

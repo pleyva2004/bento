@@ -13,7 +13,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(errorResponse, { status: 400 });
     }
 
-    const { message } = body;
+    // Support both legacy single message and new conversation history
+    const messageOrHistory = body.messages || body.message;
+
+    if (!messageOrHistory) {
+      const errorResponse: ChatErrorResponse = { error: 'Message or messages required' };
+      return NextResponse.json(errorResponse, { status: 400 });
+    }
 
     // Check if client wants streaming (via query param or header)
     const url = new URL(request.url);
@@ -22,7 +28,7 @@ export async function POST(request: NextRequest) {
     if (wantsStream) {
       // Return streaming response
       try {
-        const stream = await getChatResponseStream(message);
+        const stream = await getChatResponseStream(messageOrHistory);
 
         return new Response(stream, {
           headers: {
@@ -34,14 +40,14 @@ export async function POST(request: NextRequest) {
       } catch (streamError) {
         console.error('Streaming Error:', streamError);
         // Fallback to non-streaming if streaming fails
-        const aiMessage = await getChatResponse(message);
+        const aiMessage = await getChatResponse(messageOrHistory);
         const response: ChatResponse = { message: aiMessage };
         return NextResponse.json(response, { status: 200 });
       }
     }
 
     // Non-streaming response (fallback)
-    const aiMessage = await getChatResponse(message);
+    const aiMessage = await getChatResponse(messageOrHistory);
     const response: ChatResponse = { message: aiMessage };
     return NextResponse.json(response, { status: 200 });
 

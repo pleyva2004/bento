@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { countMessageTokens, truncateMessages } from '@/lib/token-utils';
+import type { ChatMessage } from '@/lib/types';
 
 interface Message {
   id: number;
@@ -23,6 +25,8 @@ const ChatInput: React.FC = () => {
   const ORIGINAL_HEIGHT = 384; // Add this constant
   const [streamingMessageId, setStreamingMessageId] = useState<number | null>(null);
   const [useStreaming, setUseStreaming] = useState(true); // Try streaming first
+  const [tokenCount, setTokenCount] = useState(0);
+  const TOKEN_LIMIT = 3800; // Leave room for response generation
 
   // Handle vertical drag to resize height - UPDATED for mobile support
   useEffect(() => {
@@ -94,6 +98,23 @@ const ChatInput: React.FC = () => {
     }
   }, [message]);
 
+  // Count tokens whenever messages change
+  useEffect(() => {
+    if (messages.length === 0) {
+      setTokenCount(0);
+      return;
+    }
+
+    // Convert messages to ChatMessage format for token counting
+    const chatMessages: ChatMessage[] = messages.map(msg => ({
+      role: msg.isUser ? 'user' : 'assistant',
+      content: msg.text
+    }));
+
+    const count = countMessageTokens(chatMessages);
+    setTokenCount(count);
+  }, [messages]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
@@ -110,6 +131,43 @@ const ChatInput: React.FC = () => {
       setMessage('');
       setIsLoading(true);
 
+      // Build conversation history for API (include current messages + new message)
+      let conversationHistory: ChatMessage[] = [
+        ...messages.map(msg => ({
+          role: msg.isUser ? 'user' as const : 'assistant' as const,
+          content: msg.text
+        })),
+        {
+          role: 'user' as const,
+          content: userMessageText
+        }
+      ];
+
+      // Check if we need to truncate messages to stay within token limit
+      const currentTokenCount = countMessageTokens(conversationHistory);
+      if (currentTokenCount > TOKEN_LIMIT) {
+        // Truncate messages, keeping the most recent ones
+        conversationHistory = truncateMessages(conversationHistory, TOKEN_LIMIT);
+
+        // Update messages state to match truncated history (remove old messages)
+        // Match truncated ChatMessages back to original Message objects to preserve IDs/timestamps
+        const allMessagesWithNew = [...messages, userMessage];
+        const truncatedMessages: Message[] = [];
+
+        for (const chatMsg of conversationHistory) {
+          // Find matching original message by content and role
+          const originalMsg = allMessagesWithNew.find(
+            msg => msg.text === chatMsg.content && msg.isUser === (chatMsg.role === 'user')
+          );
+          if (originalMsg) {
+            truncatedMessages.push(originalMsg);
+          }
+        }
+
+        // Update state with truncated messages (preserving original IDs and timestamps)
+        setMessages(truncatedMessages);
+      }
+
       // Try streaming first if enabled
       if (useStreaming) {
         try {
@@ -118,7 +176,7 @@ const ChatInput: React.FC = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: userMessageText }),
+            body: JSON.stringify({ messages: conversationHistory }),
           });
 
           // Check if we got a streaming response
@@ -153,7 +211,7 @@ const ChatInput: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: userMessageText }),
+          body: JSON.stringify({ messages: conversationHistory }),
         });
 
         const data = await response.json();
@@ -211,26 +269,31 @@ const ChatInput: React.FC = () => {
         const chunk = decoder.decode(value, { stream: true });
         const lines = chunk.split('\n');
 
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.slice(6);
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.content) {
-                accumulatedText += parsed.content;
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6);
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.content) {
+              accumulatedText += parsed.content;
 
-                // Update the message with accumulated text
-                setMessages(prev => prev.map(msg =>
-                  msg.id === messageId
-                    ? { ...msg, text: accumulatedText }
-                    : msg
-                ));
+              // Hide typing indicator as soon as first content arrives
+              if (isLoading) {
+                setIsLoading(false);
               }
-            } catch (e) {
-              // Skip invalid JSON
+
+              // Update the message with accumulated text
+              setMessages(prev => prev.map(msg =>
+                msg.id === messageId
+                  ? { ...msg, text: accumulatedText }
+                  : msg
+              ));
             }
+          } catch (e) {
+            // Skip invalid JSON
           }
         }
+      }
       }
     } catch (error) {
       console.error('Error reading stream:', error);
@@ -300,6 +363,15 @@ const ChatInput: React.FC = () => {
               <div className="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-white border border-gray-300">
                 <div className="w-3 h-3 bg-green-900 rounded-full"></div>
                 <h3 className="font-medium text-gray-900">Levrok Labs AI</h3>
+                <span className={`text-xs font-medium ${
+                  tokenCount < 3000
+                    ? 'text-green-600'
+                    : tokenCount < 3600
+                    ? 'text-yellow-600'
+                    : 'text-orange-600'
+                }`}>
+                  {tokenCount}/{TOKEN_LIMIT} tokens
+                </span>
               </div>
               <button
                 onClick={handleMinimize}
