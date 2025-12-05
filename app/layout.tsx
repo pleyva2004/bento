@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Levrok Labs - AI Agency',
@@ -24,6 +25,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <Footer />
       </body>
     </html>
   );
