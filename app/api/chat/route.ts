@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getChatResponse } from '@/lib/llm';
+import { getChatResponse, getChatResponseStream } from '@/lib/llm';
 import { isChatRequest } from '@/lib/types';
 import type { ChatResponse, ChatErrorResponse } from '@/lib/types';
 
@@ -15,9 +15,33 @@ export async function POST(request: NextRequest) {
 
     const { message } = body;
 
-    // Get AI response from OpenAI
-    const aiMessage = await getChatResponse(message);
+    // Check if client wants streaming (via query param or header)
+    const url = new URL(request.url);
+    const wantsStream = url.searchParams.get('stream') === 'true';
 
+    if (wantsStream) {
+      // Return streaming response
+      try {
+        const stream = await getChatResponseStream(message);
+
+        return new Response(stream, {
+          headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+          },
+        });
+      } catch (streamError) {
+        console.error('Streaming Error:', streamError);
+        // Fallback to non-streaming if streaming fails
+        const aiMessage = await getChatResponse(message);
+        const response: ChatResponse = { message: aiMessage };
+        return NextResponse.json(response, { status: 200 });
+      }
+    }
+
+    // Non-streaming response (fallback)
+    const aiMessage = await getChatResponse(message);
     const response: ChatResponse = { message: aiMessage };
     return NextResponse.json(response, { status: 200 });
 

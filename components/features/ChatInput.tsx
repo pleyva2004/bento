@@ -21,6 +21,8 @@ const ChatInput: React.FC = () => {
   const [customHeight, setCustomHeight] = useState(384); // 24rem = 384px
   const [isDragging, setIsDragging] = useState(false);
   const ORIGINAL_HEIGHT = 384; // Add this constant
+  const [streamingMessageId, setStreamingMessageId] = useState<number | null>(null);
+  const [useStreaming, setUseStreaming] = useState(true); // Try streaming first
 
   // Handle vertical drag to resize height - UPDATED for mobile support
   useEffect(() => {
@@ -104,17 +106,54 @@ const ChatInput: React.FC = () => {
       };
 
       setMessages(prev => [...prev, userMessage]);
+      const userMessageText = message.trim();
       setMessage('');
       setIsLoading(true);
 
-      // Get AI response
+      // Try streaming first if enabled
+      if (useStreaming) {
+        try {
+          const response = await fetch('/api/chat?stream=true', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: userMessageText }),
+          });
+
+          // Check if we got a streaming response
+          const contentType = response.headers.get('content-type');
+          if (contentType?.includes('text/event-stream')) {
+            // Handle streaming response
+            await handleStreamingResponse(response);
+            return;
+          } else {
+            // If we didn't get a stream, parse as JSON and fallback
+            const data = await response.json();
+            const aiMessage: Message = {
+              id: Date.now() + 1,
+              text: data.message || "Sorry, I couldn't process that request.",
+              isUser: false,
+              timestamp: new Date()
+            };
+            setMessages(prev => [...prev, aiMessage]);
+            setIsLoading(false);
+            return;
+          }
+        } catch (streamError) {
+          console.warn('Streaming failed, falling back to HTTP:', streamError);
+          setUseStreaming(false); // Disable streaming for future requests
+        }
+      }
+
+      // Fallback to non-streaming HTTP request
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: message.trim() }),
+          body: JSON.stringify({ message: userMessageText }),
         });
 
         const data = await response.json();
@@ -136,6 +175,68 @@ const ChatInput: React.FC = () => {
         setMessages(prev => [...prev, errorMessage]);
         setIsLoading(false);
       }
+    }
+  };
+
+  const handleStreamingResponse = async (response: Response) => {
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error('No reader available');
+    }
+
+    const decoder = new TextDecoder();
+    let accumulatedText = '';
+    const messageId = Date.now() + 1;
+    setStreamingMessageId(messageId);
+
+    // Add initial empty message that will be updated
+    const aiMessage: Message = {
+      id: messageId,
+      text: '',
+      isUser: false,
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, aiMessage]);
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          setIsLoading(false);
+          setStreamingMessageId(null);
+          break;
+        }
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.content) {
+                accumulatedText += parsed.content;
+
+                // Update the message with accumulated text
+                setMessages(prev => prev.map(msg =>
+                  msg.id === messageId
+                    ? { ...msg, text: accumulatedText }
+                    : msg
+                ));
+              }
+            } catch (e) {
+              // Skip invalid JSON
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error reading stream:', error);
+      setIsLoading(false);
+      setStreamingMessageId(null);
+      throw error;
     }
   };
 
@@ -165,18 +266,16 @@ const ChatInput: React.FC = () => {
   return (
     <div className="fixed left-0 right-0 z-30 bottom-0">
       <div
-        className={`bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl overflow-hidden ${
-          isDragging ? '' : 'transition-all duration-1000 ease-out'
-        }`}
+        className={`bg-gray-100 bg-opacity-60 border border-gray-300 border-opacity-40 rounded-t-2xl overflow-hidden ${isDragging ? '' : 'transition-all duration-1000 ease-out'
+          }`}
         style={{ height: isExpanded ? `${customHeight}px` : 'auto' }}
       >
         <div className="max-w-4xl mx-auto">
           {/* Drag Handle */}
           {isExpanded && (
             <div
-              className={`h-2 w-full cursor-ns-resize hover:bg-gray-300 hover:bg-opacity-50 transition-colors ${
-                isDragging ? 'bg-gray-300 bg-opacity-70' : ''
-              }`}
+              className={`h-2 w-full cursor-ns-resize hover:bg-gray-300 hover:bg-opacity-50 transition-colors ${isDragging ? 'bg-gray-300 bg-opacity-70' : ''
+                }`}
               onMouseDown={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -190,13 +289,12 @@ const ChatInput: React.FC = () => {
             />
           )}
           {/* Expanded Chat Area */}
-          <div className={`transition-all duration-1000 ${
-            isExpanded
-              ? isCollapsing
-                ? 'opacity-0 transform translate-y-4'
-                : 'opacity-100 transform translate-y-0'
-              : 'opacity-0 transform translate-y-4 h-0'
-          }`} style={{ height: isExpanded ? `${customHeight - (window.innerWidth >= 768 ? 120 : 135)}px` : '0' }}>
+          <div className={`transition-all duration-1000 ${isExpanded
+            ? isCollapsing
+              ? 'opacity-0 transform translate-y-4'
+              : 'opacity-100 transform translate-y-0'
+            : 'opacity-0 transform translate-y-4 h-0'
+            }`} style={{ height: isExpanded ? `${customHeight - (window.innerWidth >= 768 ? 120 : 135)}px` : '0' }}>
             {/* Chat Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-300 border-opacity-100">
               <div className="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-white border border-gray-300">
@@ -225,23 +323,25 @@ const ChatInput: React.FC = () => {
                       className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}
                     >
                       <div
-                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-                          msg.isUser
-                            ? 'bg-gray-800 bg-opacity-80 text-white border border-gray-700 border-opacity-50'
-                            : 'bg-white text-gray-900 border border-gray-300'
-                        }`}
+                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${msg.isUser
+                          ? 'bg-gray-800 bg-opacity-80 text-white border border-gray-700 border-opacity-50'
+                          : 'bg-white text-gray-900 border border-gray-300'
+                          } ${msg.id === streamingMessageId ? 'relative' : ''}`}
                       >
                         <p className="text-sm">
                           <ReactMarkdown
                             components={{
-                              ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 mb-2" {...props} />,
-                              ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-1 mb-2" {...props} />,
-                              li: ({node, ...props}) => <li className="ml-0" {...props} />,
-                              p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />
+                              ul: ({ node, ...props }) => <ul className="list-disc list-inside space-y-1 mb-2" {...props} />,
+                              ol: ({ node, ...props }) => <ol className="list-decimal list-inside space-y-1 mb-2" {...props} />,
+                              li: ({ node, ...props }) => <li className="ml-0" {...props} />,
+                              p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />
                             }}
                           >
                             {msg.text}
                           </ReactMarkdown>
+                          {msg.id === streamingMessageId && (
+                            <span className="inline-block w-1.5 h-4 ml-0.5 bg-gray-900 animate-pulse" />
+                          )}
                         </p>
                         {/* <p className="text-xs opacity-70 mt-1">
                           {msg.timestamp.toLocaleTimeString()}
