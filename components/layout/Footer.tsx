@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="backdrop-blur-[1px] bg-white/5 border-t border-white/10 pb-32 md:pb-24">
-      <div className="max-w-7xl mx-auto w-full px-8 md:pl-24 lg:pl-32 lg:pr-16 py-12 md:py-16">
+      <div className="max-w-7xl mx-auto w-full px-8 md:pl-24 lg:pl-32 lg:pr-16 py-16 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Stay Updated Section */}
           <div className="lg:col-span-1 max-w-sm">
