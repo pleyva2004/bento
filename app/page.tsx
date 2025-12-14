@@ -22,7 +22,6 @@ export default function Home() {
                 />
                 <Hero />
                 <FloatingCTA />
-                {/* <TryOurAI /> */}
                 <ChatInput />
             </div>
         </div>
