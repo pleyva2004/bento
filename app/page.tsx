@@ -7,7 +7,6 @@ import FloatingCTA from '@/components/layout/FloatingCTA';
 import Logo from '@/components/layout/Logo';
 import ChatInput from '@/components/features/ChatInput';
 import ParticleAnimation from '@/components/ParticleAnimation';
-// import TryOurAI from '@/components/features/TryOurAI';
 
 export default function Home() {
     const [currentSection, setCurrentSection] = useState<string>('about');
