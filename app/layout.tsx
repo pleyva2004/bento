@@ -3,10 +3,10 @@ import './globals.css';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Levrok Labs - AI Agency',
+  title: 'Levrok Labs - Private. Equitable. Transparent.',
   description: 'Levrok Labs - AI Agency engineering intelligent solutions for tomorrow\'s challenges',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/favicon.ico',// to be changed with logo
   },
 };
 
