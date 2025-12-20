@@ -5,6 +5,8 @@
  * booking times (excluding times with existing calendar events)
  */
 
+import { getBusinessHoursUTC, BUSINESS_TIMEZONE } from './date-utils';
+
 export interface AvailableSlot {
   time: string; // ISO 8601 format
 }
@@ -36,21 +38,17 @@ export async function getAvailableSlots(
   }
 
   try {
-    // Parse the date
-    const [year, month, day] = date.split('-').map(Number);
+    // Get business hours as UTC times (timezone-safe, works on any server)
+    const { startDate, endDate } = getBusinessHoursUTC(date);
 
-    // Create start of day (11 AM EST = your business hours start)
-    const startDate = new Date(year, month - 1, day, 11, 0, 0);
-    // Create end of day (7 PM EST = your business hours end)
-    const endDate = new Date(year, month - 1, day, 19, 0, 0);
-
-    // Convert to UTC for API call
+    // Convert to UTC ISO strings for API call
     const startTimeUTC = startDate.toISOString();
     const endTimeUTC = endDate.toISOString();
 
     console.log('[Cal Availability] Fetching slots:', {
       date,
-      timezone,
+      userTimezone: timezone,
+      businessTimezone: BUSINESS_TIMEZONE,
       startTimeUTC,
       endTimeUTC,
       eventTypeId,
@@ -200,8 +198,9 @@ export async function testCalAvailability(): Promise<void> {
     const dateString = testDate.toISOString().split('T')[0];
 
     console.log('[Cal Availability] Testing with date:', dateString);
+    console.log('[Cal Availability] Business timezone:', BUSINESS_TIMEZONE);
 
-    const slots = await getAvailableSlots(dateString, 'America/New_York');
+    const slots = await getAvailableSlots(dateString, BUSINESS_TIMEZONE);
 
     console.log('[Cal Availability] Test result:', {
       date: dateString,

@@ -85,7 +85,7 @@ export default function ParticleAnimation() {
 
         if (distance < defaultConfig.mouseAttractionRadius) {
           const force = (1 - distance / defaultConfig.mouseAttractionRadius) *
-                       defaultConfig.mouseAttractionStrength;
+            defaultConfig.mouseAttractionStrength;
           particle.vx += (dx / distance) * force;
           particle.vy += (dy / distance) * force;
         }
@@ -188,12 +188,15 @@ export default function ParticleAnimation() {
     };
     animate();
 
-    // Event listeners
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('resize', () => {
+    // Resize handler - defined as named function for proper cleanup
+    const handleResize = () => {
       setCanvasSize();
       initParticles();
-    });
+    };
+
+    // Event listeners
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
 
     // Cleanup
     return () => {
@@ -201,7 +204,7 @@ export default function ParticleAnimation() {
         cancelAnimationFrame(animationFrameRef.current);
       }
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', setCanvasSize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 

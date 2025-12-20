@@ -438,3 +438,4 @@ yarn-error.log*
 
 bento-cloud-service-credentials.json
 bento-credentials.json
+*.tsbuildinfo
