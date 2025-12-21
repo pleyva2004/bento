@@ -32,6 +32,20 @@ const defaultConfig: ParticleAnimationConfig = {
   connectionHighlightRadius: 150, // Highlight area near cursor
 };
 
+// Calculate particle count based on viewport area for consistent density across devices
+const calculateParticleCount = (width: number, height: number): number => {
+  // Reference: 70 particles looks good on 1920x1080 (~2M pixels)
+  const referenceArea = 1920 * 1080;
+  const referenceCount = 70;
+  const density = referenceCount / referenceArea;
+
+  const currentArea = width * height;
+  const count = Math.round(currentArea * density);
+
+  // Clamp between 15 (minimum for visual interest) and 100 (performance cap)
+  return Math.max(18, Math.min(100, count));
+};
+
 export default function ParticleAnimation() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
@@ -52,10 +66,11 @@ export default function ParticleAnimation() {
     };
     setCanvasSize();
 
-    // Initialize particles
+    // Initialize particles with viewport-based count for consistent density
     const initParticles = () => {
       particlesRef.current = [];
-      for (let i = 0; i < defaultConfig.particleCount; i++) {
+      const particleCount = calculateParticleCount(canvas.width, canvas.height);
+      for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
