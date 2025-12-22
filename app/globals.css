@@ -49,6 +49,19 @@ html {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Fluid Typography System */
+  .text-hero-label {
+    font-size: clamp(0.625rem, 1.5vw + 0.25rem, 1.125rem);
+    letter-spacing: clamp(0.05em, 0.5vw, 0.1em);
+    line-height: 1.5;
+  }
+
+  .text-section-label {
+    font-size: clamp(0.75rem, 1.2vw + 0.3rem, 1rem);
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+  }
 }
 
 /* Luxury Animations */

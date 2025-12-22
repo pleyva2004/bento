@@ -43,7 +43,7 @@ const calculateParticleCount = (width: number, height: number): number => {
   const count = Math.round(currentArea * density);
 
   // Clamp between 15 (minimum for visual interest) and 100 (performance cap)
-  return Math.max(18, Math.min(100, count));
+  return Math.max(20, Math.min(100, count));
 };
 
 export default function ParticleAnimation() {

@@ -4,8 +4,8 @@ const Hero: React.FC = () => {
   return (
     <main className="min-h-[90vh] flex items-start sm:items-center justify-center relative overflow-hidden pt-[180px] sm:pt-[124px] md:pt-[140px]">
       {/* Top Centered Text */}
-      <div className="absolute top-4 sm:top-[110px] md:top-[130px] left-0 right-0 text-center z-10 flex items-center justify-center h-10 sm:h-auto">
-        <p className="text-[10px] sm:text-sm md:text-base lg:text-lg text-gray-600 font-light tracking-widest uppercase text-balance">
+      <div className="absolute top-4 sm:top-12 md:top-14 left-0 right-0 text-center z-10 flex items-center justify-center h-10 sm:h-auto">
+        <p className="text-hero-label text-gray-600 font-light uppercase text-balance">
           [ LEVROK Labs - Intelligent Data Systems ]
         </p>
       </div>
@@ -33,7 +33,7 @@ const Hero: React.FC = () => {
 
         {/* Subheading */}
         <div className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-xl text-gray-600 font-light tracking-wide mt-0 sm:mt-6 backdrop-blur-[1px] bg-white/5 rounded-3xl p-6">
-          Using intelligence to scale and improve decision-making
+          Intelligent insights. Efficient Operations. Improved Decision-Making. Scale for the Future.
         </div>
 
         {/* CTA Buttons */}
