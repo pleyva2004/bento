@@ -9,6 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 code {
@@ -52,7 +53,7 @@ html {
 
   /* Fluid Typography System */
   .text-hero-label {
-    font-size: clamp(0.625rem, 1.5vw + 0.25rem, 1.125rem);
+    font-size: clamp(0.45rem, 1.5vw, 1.125rem);
     letter-spacing: clamp(0.05em, 0.5vw, 0.1em);
     line-height: 1.5;
   }
@@ -70,6 +71,7 @@ html {
     opacity: 0;
     transform: translateY(20px) scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -80,15 +82,19 @@ html {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
 @keyframes glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 40px rgba(139, 92, 246, 0.2);
   }
+
   50% {
     box-shadow: 0 0 30px rgba(99, 102, 241, 0.4), 0 0 60px rgba(139, 92, 246, 0.3);
   }
@@ -106,4 +112,3 @@ html {
 .animate-glow {
   animation: glow 3s ease-in-out infinite;
 }
-

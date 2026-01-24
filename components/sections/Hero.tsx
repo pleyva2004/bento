@@ -4,8 +4,8 @@ const Hero: React.FC = () => {
   return (
     <main className="min-h-[90vh] flex items-start sm:items-center justify-center relative overflow-hidden pt-[180px] sm:pt-[124px] md:pt-[140px]">
       {/* Top Centered Text */}
-      <div className="absolute top-4 sm:top-12 md:top-14 left-0 right-0 text-center z-10 flex items-center justify-center h-10 sm:h-auto">
-        <p className="text-hero-label text-gray-600 font-light uppercase text-balance">
+      <div className="absolute top-4 sm:top-12 md:top-14 left-0 right-0 md:left-20 md:right-[280px] xl:left-0 xl:right-0 text-center z-10 flex items-center justify-center h-10 sm:h-auto px-4 md:px-0">
+        <p className="text-hero-label text-gray-600 font-light uppercase text-balance whitespace-nowrap">
           [ LEVROK Labs - Intelligent Data Systems ]
         </p>
       </div>
